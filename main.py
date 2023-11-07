@@ -17,6 +17,16 @@ def main():
     """
     Main function to set up and run the Discord bot.
     """
+    initial_extensions = [
+        'cogs.membership'
+    ]
+
+    for extension in initial_extensions:
+        try:
+            bot.load_extension(extension)
+        except Exception:
+            print(f'Failed to load extension: ({extension}).')
+
 
 if __name__ == "__main__":
     main()
