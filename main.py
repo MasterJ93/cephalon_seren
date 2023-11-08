@@ -10,15 +10,15 @@ from config import settings
 intents = discord.Intents.default()
 intents.members = True
 
-bot = commands.Bot(command_prefix=settings['COMMAND_PREFIX'],
+client = commands.Bot(command_prefix=settings['COMMAND_PREFIX'],
                    intents=intents)
 
-@bot.event
+@client.event
 async def on_ready():
     """
     Called when the bot is ready.
     """
-    await bot.tree.sync()
+    await client.tree.sync()
 
     print("Successfully connected to Discord.")
 
@@ -32,11 +32,11 @@ def main():
 
     for extension in initial_extensions:
         try:
-            bot.load_extension(extension)
-        except Exception:
+            client.load_extension(extension)
+        except discord.DiscordException:
             print(f'Failed to load extension: ({extension}).')
 
-    bot.run(settings['DISCORD_TOKEN'])
+    client.run(settings['DISCORD_TOKEN'])
 
 
 if __name__ == "__main__":
