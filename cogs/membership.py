@@ -4,9 +4,7 @@ membership features, such as assigning roles to new members and sending
 them a message to inquire about their interest in joining the clan.
 """
 import asyncio
-import discord
 from discord.ext import commands
-from discord.utils import get
 from config import settings
 
 class Membership(commands.Cog):
