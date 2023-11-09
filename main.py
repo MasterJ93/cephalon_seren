@@ -22,6 +22,16 @@ async def on_ready():
 
     print("Successfully connected to Discord.")
 
+@client.tree.command(name='ping',
+                     description='Sends the bot\'s '\
+                     'frequency in milliseconds (ms).')
+async def ping(interaction: discord.Interaction):
+    """
+    Sends the bot's frequency in milliseconds (ms).
+    """
+    await interaction.response.send_message(
+        f"Pong! ({round(client.latency * 1000)}ms)")
+
 def main():
     """
     Main function to set up and run the Discord bot.
