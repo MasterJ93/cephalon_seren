@@ -23,7 +23,7 @@ async def on_ready():
     """
     await client.tree.sync()
 
-    print("Successfully connected to Discord.")
+    logger.info("Successfully connected to Discord.")
 
 @client.tree.command(name='ping',
                      description='Sends the bot\'s '\
