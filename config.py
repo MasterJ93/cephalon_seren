@@ -7,7 +7,7 @@ for operation.
 
 settings = {
     'DISCORD_TOKEN': "", # Use 'os.getenv('DISCORD_TOKEN')' in production.
-    'COMMAND_PREFIX': '',
+    'COMMAND_PREFIX': '/',
     'ROLE_ID': {
         'OPERATOR': "",
         'DRIFTER': "",
