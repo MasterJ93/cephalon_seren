@@ -3,9 +3,12 @@ main.py: The entry point for the Cephalon Seren Discord bot.
 This module initializes the bot, loads the necessary cogs,
 and starts the event loop.
 """
+import logging
 import discord
 from discord.ext import commands
 from config import settings
+
+logger = logging.getLogger(__name__)
 
 intents = discord.Intents.default()
 intents.members = True
