@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 
 intents = discord.Intents.default()
 intents.members = True
+intents.message_content = True
 
 client = commands.Bot(command_prefix=settings['COMMAND_PREFIX'],
                    intents=intents)
