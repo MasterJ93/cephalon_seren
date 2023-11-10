@@ -3,6 +3,7 @@ main.py: The entry point for the Cephalon Seren Discord bot.
 This module initializes the bot, loads the necessary cogs,
 and starts the event loop.
 """
+import asyncio
 import logging
 import discord
 from discord.ext import commands
@@ -46,9 +47,10 @@ def main():
 
     for extension in initial_extensions:
         try:
-            client.load_extension(extension)
-        except discord.DiscordException:
+            asyncio.run(client.load_extension(extension))
+        except discord.DiscordException as e:
             print(f'Failed to load extension: ({extension}).')
+            print(f'{e}')
 
     client.run(settings['DISCORD_TOKEN'])
 
