@@ -14,7 +14,7 @@ class Membership(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.Cog.listener
+    @commands.Cog.listener()
     async def on_member_join(self, member):
         """
         Event listener for when a member joins the server.
