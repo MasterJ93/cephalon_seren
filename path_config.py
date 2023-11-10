@@ -1,5 +1,5 @@
 """
- Appendis the project root to the system path.
+ Appends the project root to the system path.
 """
 import sys
 import os
