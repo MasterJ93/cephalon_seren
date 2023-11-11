@@ -44,8 +44,17 @@ async def sync(ctx):
     except discord.DiscordException as err:
         print(err)
 
-    client.run(settings['DISCORD_TOKEN'])
+initial_cogs = [
+    Membership(client)
+]
+
+for cog in initial_cogs:
+    try:
+        asyncio.run(client.add_cog(cog))
+        print(f'Successfully added cog: {cog}.')
+        logger.info("%s has been successfully added.", cog)
+    except discord.DiscordException as e:
+        print(e)
 
 
-if __name__ == "__main__":
-    main()
+client.run(settings['DISCORD_TOKEN'])
