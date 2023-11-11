@@ -21,8 +21,14 @@ class Membership(commands.Cog):
         Assigns roles after a delay and sends a message to the member.
         """
 
-        # Wait for a set amount of time before assigning the role
+        # Wait for a set amount of time before assigning the role.
         await asyncio.sleep(5)
 
-        await member.add_roles(settings['ALLIANCE'],
-                               settings['OPERATOR'])
+        alliance_role = member.guild.get_role(
+            settings['ROLE_ID']['ALLIANCE']
+        )
+        operator_role = member.guild.get_role(
+            settings['ROLE_ID']['OPERATOR']
+        )
+        # Add the Alliance and Operator roles for the member.
+        await member.add_roles(alliance_role, operator_role)
