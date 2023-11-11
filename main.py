@@ -36,20 +36,13 @@ async def ping(interaction: discord.Interaction):
     await interaction.response.send_message(
         f"Pong! ({round(client.latency * 1000)}ms)")
 
-def main():
-    """
-    Main function to set up and run the Discord bot.
-    """
-    initial_extensions = [
-        'cogs.membership'
-    ]
-
-    for extension in initial_extensions:
-        try:
-            asyncio.run(client.load_extension(extension))
-        except discord.DiscordException as e:
-            print(f'Failed to load extension: ({extension}).')
-            print(f'{e}')
+@client.command()
+async def sync(ctx):
+    """Syncs the global commands."""
+    try:
+        await client.tree.sync()
+    except discord.DiscordException as err:
+        print(err)
 
     client.run(settings['DISCORD_TOKEN'])
 
