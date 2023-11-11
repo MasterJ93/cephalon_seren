@@ -7,6 +7,7 @@ import asyncio
 import logging
 import discord
 from discord.ext import commands
+from cogs.membership import Membership
 from config import settings
 
 logger = logging.getLogger(__name__)
