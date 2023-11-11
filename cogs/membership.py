@@ -32,3 +32,15 @@ class Membership(commands.Cog):
         )
         # Add the Alliance and Operator roles for the member.
         await member.add_roles(alliance_role, operator_role)
+
+        # Post an ephemeral message, asking the member if they're here to
+        # join the clan.
+        channel = member.guild.get_channel(
+            # settings['CHANNEL_ID']['ALLIANCE_GENERAL']
+            1172080684672749568
+            )
+        webhooks = await channel.webhooks()
+        print(webhooks)
+        seren_webhook = webhooks[0]
+
+        await seren_webhook.send(content='It works!')
