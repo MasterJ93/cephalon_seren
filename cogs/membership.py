@@ -5,7 +5,9 @@ them a message to inquire about their interest in joining the clan.
 """
 import asyncio
 from discord.ext import commands
+from utils.messages import beginner
 from config import settings
+from views.beginner_views import OnboardView
 
 class Membership(commands.Cog):
     """
@@ -33,14 +35,30 @@ class Membership(commands.Cog):
         # Add the Alliance and Operator roles for the member.
         await member.add_roles(alliance_role, operator_role)
 
+        # If a bot was invited into the server, we don't need to give it
+        # any messages.
+        if member.bot is True:
+            return
         # Post an ephemeral message, asking the member if they're here to
         # join the clan.
         channel = member.guild.get_channel(
-            # settings['CHANNEL_ID']['ALLIANCE_GENERAL']
-            1172080684672749568
-            )
-        webhooks = await channel.webhooks()
-        print(webhooks)
-        seren_webhook = webhooks[0]
+            settings['CHANNEL_ID']['ALLIANCE_GENERAL']
+        )
 
-        await seren_webhook.send(content='It works!')
+        # Sends the message and mentions the member.
+        # Note: we send alliance_billboard in case the member selects
+        # the second option.
+        alliance_billboard = member.guild.get_channel(
+            settings['CHANNEL_ID']['ALLIANCE_BILLBOARD']
+        )
+        view = OnboardView(member.id, alliance_billboard)
+        await channel.send(
+            content=beginner['INTRO'].format(username=member.mention),
+            view = view
+        )
+
+async def setup(bot):
+    """
+    Sets up the cog.
+    """
+    await bot.add_cog(Membership(bot))
