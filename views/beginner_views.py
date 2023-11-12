@@ -3,6 +3,7 @@ Contains views related to members that just came into the server.
 """
 import discord
 from utils.messages import beginner
+from config import settings
 
 class BeginnerViewDropdown(discord.ui.Select):
     """Contains a dropdown for the beginner view."""
@@ -32,7 +33,8 @@ class BeginnerViewDropdown(discord.ui.Select):
             )
         elif self.values[1]:
             await response.send_message(
-                content=beginner['OPTION_2_RESPONSE'],
+                content=beginner['OPTION_2_RESPONSE'].format(
+                    billboards=settings['CHANNEL_ID']['ALLIANCE_BILLBOARD']),
                 ephemeral=True,
                 delete_after=60.0
             )
