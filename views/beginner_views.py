@@ -67,7 +67,7 @@ class OnboardView(discord.ui.View):
     async def selection_3(self,
                           interaction: discord.Interaction,
                           button: discord.ui.Button):
-        """When the first option is selected."""
+        """When the third option is selected."""
         label = button.label
         print(f"\"{label}\" selected.")
 
