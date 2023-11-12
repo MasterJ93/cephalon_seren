@@ -3,52 +3,79 @@ Contains views related to members that just came into the server.
 """
 import discord
 from utils.messages import beginner
-from config import settings
 
-class BeginnerViewDropdown(discord.ui.Select):
-    """Contains a dropdown for the beginner view."""
-    def __init__(self):
-        options = [
-            discord.SelectOption(label=beginner['DROPDOWN_OPTION_1']),
-            discord.SelectOption(label=beginner['DROPDOWN_OPTION_2']),
-            discord.SelectOption(label=beginner['DROPDOWN_OPTION_3'])
-        ]
-        super().__init__(placeholder='Choose an option...', options=options)
-
-    async def callback(self, interaction: discord.Interaction):
-        seren_message = await interaction.original_response()
-        mentioned_member = seren_message.raw_mentions[0]
-        response = interaction.response
-
-        # Checks if the member who interacted with the original message is
-        # the one Seren mentioned.
-        if interaction.user.id is not mentioned_member:
-            return
-
-        if self.values[0]:
-            await response.send_message(
-                content=beginner['OPTION_1_RESPONSE'],
-                ephemeral=True,
-                delete_after=60.0
-            )
-        elif self.values[1]:
-            await response.send_message(
-                content=beginner['OPTION_2_RESPONSE'].format(
-                    billboards=settings['CHANNEL_ID']['ALLIANCE_BILLBOARD']),
-                ephemeral=True,
-                delete_after=60.0
-            )
-        elif self.values[2]:
-            await response.send_message(
-                content=beginner['OPTION_3_RESPONSE'],
-                ephemeral=True,
-                delete_after=60.0
-            )
-
-
-class BeginnerView(discord.ui.View):
-    """Contains a view for the beginner message."""
-    def __init__(self):
+class OnboardView(discord.ui.View):
+    """Contains a view for first-time members."""
+    def __init__(self, user_id: int, alliance_channel: discord.TextChannel):
         super().__init__()
+        self.user_id = user_id
+        self.alliance_channel = alliance_channel
+        self.value = None
 
-        self.add_item(BeginnerViewDropdown())
+    # For whatever reason, putting a "/" in the method stops Pylint
+    # from complaining. Hopefully there are no side effects.
+    async def interaction_check(self,
+                                interaction: discord.Interaction, /) -> bool:
+        return interaction.user.id == self.user_id
+
+    @discord.ui.button(
+        label=beginner['DROPDOWN_OPTION_1'],
+        style=discord.ButtonStyle.green
+    )
+    async def selection_1(self,
+                          interaction: discord.Interaction,
+                          button: discord.ui.Button):
+        """When the first option is selected."""
+        label = button.label
+        print(f"\"{label}\" selected.")
+
+        response = interaction.response
+        response_message = beginner['OPTION_1_RESPONSE']
+
+        await response.send_message(
+            content=response_message,
+            ephemeral=True,
+            delete_after=60.0
+        )
+
+    @discord.ui.button(
+        label=beginner['DROPDOWN_OPTION_2'],
+        style=discord.ButtonStyle.green
+    )
+    async def selection_2(self,
+                          interaction: discord.Interaction,
+                          button: discord.ui.Button):
+        """When the second option is selected."""
+        label = button.label
+        print(f"\"{label}\" selected.")
+
+        response = interaction.response
+        response_message = beginner['OPTION_2_RESPONSE'].format(
+                    billboards=self.alliance_channel.mention
+        )
+
+        await response.send_message(
+            content=response_message,
+            ephemeral=True,
+            delete_after=60.0
+        )
+
+    @discord.ui.button(
+        label=beginner['DROPDOWN_OPTION_3'],
+        style=discord.ButtonStyle.green
+    )
+    async def selection_3(self,
+                          interaction: discord.Interaction,
+                          button: discord.ui.Button):
+        """When the first option is selected."""
+        label = button.label
+        print(f"\"{label}\" selected.")
+
+        response = interaction.response
+        response_message = beginner['OPTION_3_RESPONSE']
+
+        await response.send_message(
+            content=response_message,
+            ephemeral=True,
+            delete_after=60.0
+        )
