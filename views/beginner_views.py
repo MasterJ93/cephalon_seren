@@ -2,7 +2,6 @@
 Contains views related to members that just came into the server.
 """
 import discord
-from discord.ext import commands
 
 # from utils import messages
 from utils.messages import beginner
