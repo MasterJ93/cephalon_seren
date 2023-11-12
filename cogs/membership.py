@@ -56,9 +56,3 @@ class Membership(commands.Cog):
             content=beginner['INTRO'].format(username=member.mention),
             view = view
         )
-
-async def setup(bot):
-    """
-    Sets up the cog.
-    """
-    await bot.add_cog(Membership(bot))
