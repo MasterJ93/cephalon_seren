@@ -6,10 +6,14 @@ from utils.messages import beginner
 
 class OnboardView(discord.ui.View):
     """Contains a view for first-time members."""
-    def __init__(self, user_id: int, alliance_channel: discord.TextChannel):
+    def __init__(self,
+                 user_id: int,
+                 alliance_general: discord.TextChannel,
+                 alliance_billboard: discord.TextChannel):
         super().__init__()
         self.user_id = user_id
-        self.alliance_channel = alliance_channel
+        self.alliance_general = alliance_general
+        self.alliance_billboard = alliance_billboard
         self.value = None
 
     # For whatever reason, putting a "/" in the method stops Pylint
@@ -51,7 +55,7 @@ class OnboardView(discord.ui.View):
 
         response = interaction.response
         response_message = beginner['OPTION_2_RESPONSE'].format(
-                    billboards=self.alliance_channel.mention
+                    billboards=self.alliance_billboard.mention
         )
 
         await response.send_message(
@@ -79,3 +83,13 @@ class OnboardView(discord.ui.View):
             ephemeral=True,
             delete_after=60.0
         )
+
+        async for message in self.alliance_general.history(
+            limit=200,
+            oldest_first=True):
+            if message.author.bot is False:
+                continue
+
+            if message.mentions[0].id == self.user_id:
+                await message.delete()
+                break

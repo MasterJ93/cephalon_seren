@@ -51,7 +51,7 @@ class Membership(commands.Cog):
         alliance_billboard = member.guild.get_channel(
             settings['CHANNEL_ID']['ALLIANCE_BILLBOARD']
         )
-        view = OnboardView(member.id, alliance_billboard)
+        view = OnboardView(member.id, channel, alliance_billboard)
         await channel.send(
             content=beginner['INTRO'].format(username=member.mention),
             view = view
