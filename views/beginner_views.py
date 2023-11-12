@@ -32,13 +32,13 @@ class BeginnerViewDropdown(discord.ui.Select):
             )
         elif self.values[1]:
             await response.send_message(
-                beginner['OPTION_2_RESPONSE'],
+                content=beginner['OPTION_2_RESPONSE'],
                 ephemeral=True,
                 delete_after=60.0
             )
         elif self.values[2]:
             await response.send_message(
-                beginner['OPTION_3_RESPONSE'],
+                content=beginner['OPTION_3_RESPONSE'],
                 ephemeral=True,
                 delete_after=60.0
             )
