@@ -33,14 +33,10 @@ class OnboardView(discord.ui.View):
         label = button.label
         print(f"\"{label}\" selected.")
 
-        response = interaction.response
         response_message = beginner['OPTION_1_RESPONSE']
 
-        await response.send_message(
-            content=response_message,
-            ephemeral=True,
-            delete_after=60.0
-        )
+        await self.send_message_and_end_onboarding(interaction.response,
+                                                   response_message)
 
     @discord.ui.button(
         label=beginner['DROPDOWN_OPTION_2'],
@@ -53,16 +49,12 @@ class OnboardView(discord.ui.View):
         label = button.label
         print(f"\"{label}\" selected.")
 
-        response = interaction.response
         response_message = beginner['OPTION_2_RESPONSE'].format(
                     billboards=self.alliance_billboard.mention
         )
 
-        await response.send_message(
-            content=response_message,
-            ephemeral=True,
-            delete_after=60.0
-        )
+        await self.send_message_and_end_onboarding(interaction.response,
+                                                   response_message)
 
     @discord.ui.button(
         label=beginner['DROPDOWN_OPTION_3'],
@@ -75,15 +67,26 @@ class OnboardView(discord.ui.View):
         label = button.label
         print(f"\"{label}\" selected.")
 
-        response = interaction.response
         response_message = beginner['OPTION_3_RESPONSE']
 
+        await self.send_message_and_end_onboarding(interaction.response,
+                                                   response_message)
+
+    async def send_message_and_end_onboarding(
+        self,
+        response: discord.InteractionResponse,
+        response_message: str):
+        """Sends an ephemeral message, then finds and deletes the
+        original message."""
+
+        # Ephemeral message is sent, then is deleted after a minute.
         await response.send_message(
             content=response_message,
             ephemeral=True,
             delete_after=60.0
         )
 
+        # We need to search for the original message so we can delete it.
         async for message in self.alliance_general.history(
             limit=200,
             oldest_first=True):
