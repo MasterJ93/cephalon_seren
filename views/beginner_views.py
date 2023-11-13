@@ -3,6 +3,7 @@ Contains views related to members that just came into the server.
 """
 import discord
 from utils.messages import beginner
+from config import settings
 
 class OnboardView(discord.ui.View):
     """Contains a view for first-time members."""
@@ -34,6 +35,24 @@ class OnboardView(discord.ui.View):
         print(f"\"{label}\" selected.")
 
         response_message = beginner['OPTION_1_RESPONSE']
+
+        # Unlike the other options, this option will have Seren send a message
+        # to the admins in the admin channel, asking if they want to accept
+        # the member's invite.
+        admin_channel = self.alliance_general.guild.get_channel(
+            settings['CHANNEL_ID']['ADMIN_CHANNEL']
+        )
+        member = self.alliance_general.guild.get_member(self.user_id)
+
+        if isinstance(admin_channel, discord.abc.Messageable) and \
+            isinstance(member, discord.Member):
+            view = ClanInviteInterestView(self.user_id,
+                                          self.alliance_general.guild)
+            await admin_channel.send(
+                content=beginner['INVITE_INTEREST'].format(
+                    username=member.mention),
+                view=view
+            )
 
         await self.send_message_and_end_onboarding(interaction.response,
                                                    response_message)
@@ -96,3 +115,46 @@ class OnboardView(discord.ui.View):
             if message.mentions[0].id == self.user_id:
                 await message.delete()
                 break
+
+class ClanInviteInterestView(discord.ui.View):
+    """Contains a view for admins to decide whether to
+    accept or reject a clan invite."""
+    def __init__(self, user_id: int, guild: discord.Guild):
+        super().__init__()
+        self.user_id = user_id
+        self.guild = guild
+        self.value = None
+
+    @discord.ui.button(label='Accept', style=discord.ButtonStyle.green)
+    async def accept_invite(self,
+                            interaction: discord.Interaction,
+                            button: discord.ui.Button):
+        """When the \"Accept\" button is selected."""
+        print(f'\"{button.label}\" button pressed.')
+
+        member = self.guild.get_member(self.user_id)
+        drifter_role = self.guild.get_role(
+            settings['ROLE_ID']['DRIFTER']
+        )
+        clan_role = self.guild.get_role(
+            settings['ROLE_ID']['CLAN']
+        )
+
+        # Add the roles to the new clan member.
+        if isinstance(member, discord.Member) and \
+            isinstance(drifter_role, discord.Role) and \
+            isinstance(clan_role, discord.Role):
+            await member.add_roles(drifter_role, clan_role)
+
+        # Send a message stating that it's done.
+        await interaction.response.send_message(
+            content=beginner['INVITE_ACCEPT']
+        )
+
+    @discord.ui.button(label="Decline", style=discord.ButtonStyle.red)
+    async def decline_invite(self,
+                             interaction: discord.Interaction,
+                             button: discord.ui.Button):
+        """When the \"Decline\" button is selected."""
+        print(f'\"{button.label}\" button pressed.')
+        print(interaction.type)
