@@ -41,7 +41,9 @@ async def ping(interaction: discord.Interaction):
 async def sync(ctx):
     """Syncs the global commands."""
     try:
-        await client.tree.sync()
+        command_list = await client.tree.sync()
+        print(f'Commands: {command_list}')
+        print('Commands have been synced.')
     except discord.DiscordException as err:
         print(err)
 
