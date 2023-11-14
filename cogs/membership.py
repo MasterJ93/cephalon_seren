@@ -4,8 +4,10 @@ membership features, such as assigning roles to new members and sending
 them a message to inquire about their interest in joining the clan.
 """
 import asyncio
+import discord
+from discord import app_commands
 from discord.ext import commands
-from utils.messages import beginner
+from utils.messages import beginner, requests
 from config import settings
 from views.beginner_views import OnboardView
 
@@ -55,4 +57,30 @@ class Membership(commands.Cog):
         await channel.send(
             content=beginner['INTRO'].format(username=member.mention),
             view = view
+        )
+
+    @app_commands.command(name='drifter-request',
+                          description='Request access to enter into '\
+                          'the adult-only channels.')
+    async def drifter_request(self, interaction: discord.Interaction):
+        """Requests access to enter into the adult-only channels."""
+
+        # Sends a request to access the clan channels as an adult
+        # (instead of a a clan member).
+        admin_channel = interaction.guild
+        if isinstance(admin_channel, discord.Guild):
+            admin_channel = admin_channel.get_channel(
+                settings['CHANNEL_ID']['ADMIN_CHANNEL']
+                )
+        if isinstance(admin_channel, discord.TextChannel):
+            content=requests['DRIFTER_INTEREST'].format(
+                username=interaction.user.mention
+            )
+            await admin_channel.send(
+                content=content
+            )
+
+        await interaction.response.send_message(
+            content=requests['DRIFTER_REQUEST'],
+            ephemeral=True
         )
