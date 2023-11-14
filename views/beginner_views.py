@@ -162,5 +162,5 @@ class ClanInviteInterestView(discord.ui.View):
 
         # Sends a response back to the admins.
         await interaction.response.send_message(
-            content=beginner['INVITE_REJECTED']
+            content=beginner['INVITE_DECLINE']
         )
