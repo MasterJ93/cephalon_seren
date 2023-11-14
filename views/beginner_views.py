@@ -130,7 +130,8 @@ class ClanInviteInterestView(discord.ui.View):
                             interaction: discord.Interaction,
                             button: discord.ui.Button):
         """When the \"Accept\" button is selected."""
-        print(f'\"{button.label}\" button pressed.')
+        button.disabled=True
+        button.style=discord.ButtonStyle.gray
 
         member = self.guild.get_member(self.user_id)
         drifter_role = self.guild.get_role(
@@ -156,5 +157,5 @@ class ClanInviteInterestView(discord.ui.View):
                              interaction: discord.Interaction,
                              button: discord.ui.Button):
         """When the \"Decline\" button is selected."""
-        print(f'\"{button.label}\" button pressed.')
-        print(interaction.type)
+        button.disabled=True
+        button.style=discord.ButtonStyle.gray
