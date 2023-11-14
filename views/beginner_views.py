@@ -159,3 +159,8 @@ class ClanInviteInterestView(discord.ui.View):
         """When the \"Decline\" button is selected."""
         button.disabled=True
         button.style=discord.ButtonStyle.gray
+
+        # Sends a response back to the admins.
+        await interaction.response.send_message(
+            content=beginner['INVITE_REJECTED']
+        )
