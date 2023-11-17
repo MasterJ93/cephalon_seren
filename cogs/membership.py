@@ -84,3 +84,46 @@ class Membership(commands.Cog):
             content=requests['DRIFTER_REQUEST'],
             ephemeral=True
         )
+
+    @app_commands.command(name='operator-request',
+                          description='Adds or removes the Operator role ' \
+                          'which adds or removes the alliance channels.'
+                          )
+    @app_commands.checks.has_role(settings['ROLE_ID']['DRIFTER'])
+    async def operator_request(self, interaction: discord.Interaction):
+        """Requests to add or remove the alliance-only channels."""
+        # Pylance will complain that some of these things are of type
+        # "None," which is incorrect. "# type: ignore"
+        # will be used to stop it from lying to us.
+
+        # Grabs the member from the guild.
+        guild = interaction.guild
+        operator_role=guild.get_role(  # type: ignore
+            settings['ROLE_ID']['OPERATOR']
+        )
+        member=guild.get_member(interaction.user.id)  # type: ignore
+        roles=member.roles  # type: ignore
+
+        # Check if the member has the "Operator" role.
+        # If yes, then remove the role.
+        # If no, then add it.
+
+        if operator_role in roles:
+            await member.remove_roles(operator_role) # type: ignore
+
+            await interaction.response.send_message(
+                content=requests['OPERATOR_REMOVE'].format(
+                    role=operator_role  # type: ignore
+                    ),
+                    ephemeral=True
+            )
+
+        elif operator_role not in roles:
+            await member.add_roles(operator_role)  # type: ignore
+
+            await interaction.response.send_message(
+                content=requests['OPERATOR_ADD'].format(
+                    role=operator_role  # type: ignore
+                ),
+                ephemeral=True
+            )
