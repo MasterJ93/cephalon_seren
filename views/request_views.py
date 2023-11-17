@@ -8,7 +8,7 @@ from config import settings
 class DrifterInterestView(discord.ui.View):
     """
     Contains a view for admins to consider adding a member to participate
-    in the adule-only channels."""
+    in the adult-only channels."""
     def __init__(self, user_id, guild: discord.Guild):
         super().__init__()
         self.user_id=user_id
