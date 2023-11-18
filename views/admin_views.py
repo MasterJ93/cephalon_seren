@@ -1,0 +1,93 @@
+"""
+Contains views related to admin-only commands.
+"""
+
+import discord
+
+class WarnView(discord.ui.View):
+    """
+    Contains a view for the "warn" command.
+    """
+    def __init__(self,
+                 interaction: discord.Interaction,
+                 guild: discord.Guild,
+                 member: discord.Member):
+        super().__init__()
+        self.interaction=interaction
+        self.guild=guild
+        self.member=member
+
+        self.confirm=False
+        self.values=[]
+
+        # rules_dropdown = RulesDropdown()
+        # self.add_item(rules_dropdown)
+        # self.values=rules_dropdown.values
+
+    # This is to allow `rule_section` to access this variable.
+    options = [
+            discord.SelectOption(
+                label='1. Adhere to Discord ToS',
+                value='0x0'
+            ),
+            discord.SelectOption(
+                label='2. No insults or hate speech',
+                value='0x1'
+            ),
+            discord.SelectOption(
+                label='3. No political/religious talk',
+                value='0x2'
+            ),
+            discord.SelectOption(
+                label='4. No spamming/advertising',
+                value='0x3'
+            ),
+            discord.SelectOption(
+                label='5. No one under 18 in adult-only channels',
+
+            ),
+            discord.SelectOption(
+                label='6. No spoilers outside of spoiler channels'
+            )
+    ]
+
+    @discord.ui.select(
+            placeholder='What rule(s) did they violate?',
+            min_values=1,
+            max_values=6,
+            options=options)
+    async def rule_selection(self,
+                             interaction: discord.Interaction,
+                             select: discord.ui.Select):
+        """The dropdown menu that shows the TL;DR versions of the rules."""
+        print(select.values)
+        self.values = select.values
+        # Look for the Send Message button, then enable it.
+        # We're using `#type: ignore` to stop Pylance from complaining.
+        send_button = [child for child in self.children
+                       if child.custom_id=='send_message'][0] #type: ignore
+        send_button.disabled = False #type: ignore
+        await interaction.response.edit_message(view=self)
+
+    @discord.ui.button(label='Send Message',
+                       style=discord.ButtonStyle.blurple,
+                       custom_id='send_message',
+                       disabled=True)
+    async def send_message(self,
+                           interaction: discord.Interaction,
+                           button: discord.ui.Button):
+        """When the \"Send Message\" button is selected."""
+        self.confirm=True
+        print(self.values)
+        self.stop()
+
+    @discord.ui.button(label='Cancel',
+                       style=discord.ButtonStyle.red,
+                       custom_id='cancel_button')
+    async def cancel_button(self,
+                           interaction: discord.Interaction,
+                           button: discord.ui.Button):
+        """When the \"Cancel\" button is selected."""
+        self.confirm=False
+        await interaction.delete_original_response()
+        self.stop()
