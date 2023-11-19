@@ -39,7 +39,6 @@ class WarnView(discord.ui.View):
             ),
             discord.SelectOption(
                 label='5. No one under 18 in adult-only channels'
-
             ),
             discord.SelectOption(
                 label='6. No spoilers outside of spoiler channels'
