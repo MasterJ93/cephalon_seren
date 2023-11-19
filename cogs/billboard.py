@@ -7,7 +7,7 @@ import discord
 from discord import Embed, app_commands
 from discord.ext import commands
 from config import settings
-from views.billboard_views import BillboardClanModal
+from views.billboard_views import BillboardClanModal, BillboardView
 
 class BillBoardCommands(commands.Cog):
     """
@@ -42,8 +42,13 @@ class BillBoardCommands(commands.Cog):
             #     content='',
             #     embed=Embed()
             # )
-            await interaction.response.send_modal(BillboardClanModal(
-                interaction.guild, interaction.user))
+            view = BillboardView(guild, interaction.user)
+            # await interaction.response.send_modal(BillboardClanModal(
+            #     interaction.guild, interaction.user))
+            await interaction.response.send_message(
+                content='',
+                view=view
+            )
         elif choices.value == 'edit':
             # message = await billboard_channel.fetch_message()
             pass
