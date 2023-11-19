@@ -1,8 +1,8 @@
 """Helper classes and methods."""
 import json
 
-class JSONReader():
-    """Reads JSON for Cephalon Seren."""
+class JSONRuleReader():
+    """Reads rules in JSON for Cephalon Seren."""
     def __init__(self, json_file):
         super().__init__()
         self.json_file = json_file
