@@ -19,8 +19,9 @@ class WarnView(discord.ui.View):
 
         self.confirm=False
         self.values=[]
-        self.message = ('Here are the rules you\'ve selected:' +
-                        '')
+        self.message = ('Here are the rules you\'ve selected:\n' +
+                        '{rules}\n' +
+                        'Do you want to send the warning with these rules?')
 
         # rules_dropdown = RulesDropdown()
         # self.add_item(rules_dropdown)
@@ -69,8 +70,6 @@ class WarnView(discord.ui.View):
         for rule in sorted_values:
             rules += f'> {rule}\n'
 
-        print(rules)
-
         # Look for the Send Message button, then enable it.
         # We're using `#type: ignore` to stop Pylance from complaining.
         send_button = [child for child in self.children
@@ -78,7 +77,10 @@ class WarnView(discord.ui.View):
         send_button.disabled = False #type: ignore
 
         # Edit the message to refresh.
-        await interaction.response.edit_message(view=self)
+        await interaction.response.edit_message(
+            content=self.message.format(rules=rules),
+            view=self
+        )
 
     @discord.ui.button(label='Send Message',
                        style=discord.ButtonStyle.blurple,
