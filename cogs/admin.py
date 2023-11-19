@@ -30,3 +30,11 @@ class AdminCommands(commands.Cog):
         view = WarnView(interaction, interaction.guild, member) # type: ignore
         await interaction.response.send_message(view=view)
         await view.wait()
+
+        if view.confirm is True:
+            pass
+        else:
+            view.clear_items()
+            await interaction.edit_original_response(
+                content='I\'ve cancelled the action.',
+                view=view)
