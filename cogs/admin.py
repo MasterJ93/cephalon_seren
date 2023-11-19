@@ -49,7 +49,8 @@ class AdminCommands(commands.Cog):
             # Edit the message to refresh and state that the message was send.
             view.clear_items()
             await interaction.edit_original_response(
-                content=admin['WARN_SENT']
+                content=admin['WARN_SENT'],
+                view=view
             )
         else:
             view.clear_items()
