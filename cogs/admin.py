@@ -6,6 +6,8 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 from config import settings
+from utils.messages import admin
+from utils.helpers import JSONRuleReader
 from views.admin_views import WarnView
 
 class AdminCommands(commands.Cog):
@@ -27,14 +29,30 @@ class AdminCommands(commands.Cog):
                           member: discord.Member
                           ):
         """Warns a member when they violate a rule."""
-        view = WarnView(interaction, interaction.guild, member) # type: ignore
+        view = WarnView(interaction, interaction.guild, member) #type: ignore
         await interaction.response.send_message(view=view)
         await view.wait()
 
         if view.confirm is True:
-            pass
+            # Read rules.json and grab the applicable rules.
+            json_rules = JSONRuleReader('utils/rules.json')
+            selected_rules = json_rules.get_selected_rules(view.values)
+
+            # Send a DM to the rule violator.
+            await member.send(
+                content=admin['WARN_MESSAGE'].format(
+                    member=member.mention,
+                    rules=selected_rules
+                )
+            )
+
+            # Edit the message to refresh and state that the message was send.
+            view.clear_items()
+            await interaction.edit_original_response(
+                content=admin['WARN_SENT']
+            )
         else:
             view.clear_items()
             await interaction.edit_original_response(
-                content='I\'ve cancelled the action.',
+                content=admin['WARN_CANCEL'],
                 view=view)
