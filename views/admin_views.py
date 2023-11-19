@@ -23,10 +23,6 @@ class WarnView(discord.ui.View):
                         '{rules}\n' +
                         'Do you want to send the warning with these rules?')
 
-        # rules_dropdown = RulesDropdown()
-        # self.add_item(rules_dropdown)
-        # self.values=rules_dropdown.values
-
     # This is to allow `rule_section` to access this variable.
     options = [
             discord.SelectOption(
