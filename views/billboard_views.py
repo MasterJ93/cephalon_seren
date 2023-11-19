@@ -13,6 +13,44 @@ class BillboardView(discord.ui.View):
         self.guild = guild
         self.member = member
 
+    @discord.ui.button(
+        label='Enter Clan Information',
+        style=discord.ButtonStyle.blurple)
+    async def clan_info_button(self,
+                               interaction: discord.Interaction,
+                               button: discord.ui.Button):
+        """When the \"Enter Clan Information\" button is selected."""
+        await interaction.response.send_modal(
+            BillboardClanModal(
+                self.guild,
+                self.member
+            )
+        )
+
+    @discord.ui.button(
+        label='Upload Clan Emblem',
+        style=discord.ButtonStyle.blurple)
+    async def upload_clan_emblem(self,
+                                 interaction: discord.Interaction,
+                                 button: discord.ui.Button):
+        """When the \"Upload Clan Emblem\" button is selected."""
+
+    @discord.ui.button(
+        label='Post Ad',
+        style=discord.ButtonStyle.red)
+    async def post_ad_button(self,
+                             interaction: discord.Interaction,
+                             button: discord.ui.Button):
+        """When the \"Post Ad\" button is selected."""
+
+    @discord.ui.button(
+        label='Cancel',
+        style=discord.ButtonStyle.red)
+    async def cancel_button(self,
+                            interaction: discord.Interaction,
+                            button: discord.ui.Button):
+        """When the \"Cancel\" button is selected."""
+
 
 class BillboardClanModal(discord.ui.Modal):
     """The modal used to enter the details for the Billboard ad."""
