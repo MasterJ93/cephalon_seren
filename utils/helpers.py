@@ -27,8 +27,27 @@ class JSONRuleReader():
         """Puts the selected rules into a list."""
         selected_rules = []
         for rule in rule_numbers:
+            # Extract the rule number from the string and convert it
+            # to an index. The rule number is assumed to be before the
+            # first '.' in the string. Subtract 1 to convert from 1-based
+            # to 0-based indexing.
+
+            # Convert the first part to integer and adjust for zero-based
+            # indexing.
             rule_index = int(rule.split('.')[0]) - 1
+
+            # Check if the calculated index is within the range of
+            # available rules. This ensures we don't try to access an index
+            # that doesn't exist in the rules list
             if 0 <= rule_index < len(self.rules['rules']):
+                # If the index is valid, append the corresponding rule to
+                # the selected_rules list
                 selected_rules.append(self.rules['rules'][rule_index])
 
-        return selected_rules
+        # Convert all of this into a string.
+        rule_string = ''
+
+        for rule in selected_rules:
+            rule_string += f'> {rule}\n'
+
+        return rule_string
