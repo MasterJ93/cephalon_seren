@@ -37,7 +37,7 @@ class BillboardView(discord.ui.View):
 
     @discord.ui.button(
         label='Post Ad',
-        style=discord.ButtonStyle.red)
+        style=discord.ButtonStyle.green)
     async def post_ad_button(self,
                              interaction: discord.Interaction,
                              button: discord.ui.Button):
