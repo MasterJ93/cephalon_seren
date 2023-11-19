@@ -9,6 +9,7 @@ import discord
 from discord.ext import commands
 from cogs.membership import Membership
 from cogs.admin import AdminCommands
+from cogs.billboard import BillBoardCommands
 from config import settings
 
 logger = logging.getLogger(__name__)
@@ -50,7 +51,8 @@ async def sync(ctx):
 
 initial_cogs = [
     Membership(client),
-    AdminCommands(client)
+    AdminCommands(client),
+    BillBoardCommands(client)
 ]
 
 for cog in initial_cogs:
