@@ -72,6 +72,7 @@ class BillboardView(discord.ui.View):
                             interaction: discord.Interaction,
                             button: discord.ui.Button):
         """When the \"Cancel\" button is selected."""
+        await self.interaction.delete_original_response()
 
 
 class BillboardClanModal(discord.ui.Modal):
