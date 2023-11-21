@@ -17,10 +17,10 @@ class BillboardView(discord.ui.View):
 
     options = [
         discord.SelectOption(
-            label="We're not accepting invite requests right now."
+            label="We're currently accepting invite requests."
         ),
         discord.SelectOption(
-            label="We're currently accepting invite requests."
+            label="We're not accepting invite requests right now."
         ),
         discord.SelectOption(
             label="We currently can't add any new members."
@@ -152,8 +152,3 @@ class BillboardClanModal(discord.ui.Modal):
             content="Information has been updated.",
             ephemeral=True
         )
-        # await interaction.edit_original_response(
-        #     content='Your ad will be previewed here.',
-        #     # embed=Embed(description=''),
-        #     view=self
-        # )
