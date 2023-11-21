@@ -82,8 +82,8 @@ class WarnView(discord.ui.View):
                        custom_id='send_message',
                        disabled=True)
     async def send_message(self,
-                           interaction: discord.Interaction,
-                           button: discord.ui.Button):
+                           _interaction: discord.Interaction,
+                           _button: discord.ui.Button):
         """When the \"Send Message\" button is selected."""
         self.confirm=True
         print(self.values)
@@ -93,8 +93,8 @@ class WarnView(discord.ui.View):
                        style=discord.ButtonStyle.red,
                        custom_id='cancel_button')
     async def cancel_button(self,
-                           interaction: discord.Interaction,
-                           button: discord.ui.Button):
+                           _interaction: discord.Interaction,
+                           _button: discord.ui.Button):
         """When the \"Cancel\" button is selected."""
         self.confirm=False
         self.stop()

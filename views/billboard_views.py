@@ -30,7 +30,7 @@ class BillboardView(discord.ui.View):
         style=discord.ButtonStyle.blurple)
     async def clan_info_button(self,
                                interaction: discord.Interaction,
-                               button: discord.ui.Button):
+                               _button: discord.ui.Button):
         """When the \"Enter Clan Information\" button is selected."""
         await interaction.response.send_modal(
             BillboardClanModal(
@@ -46,6 +46,9 @@ class BillboardView(discord.ui.View):
                                  interaction: discord.Interaction,
                                  button: discord.ui.Button):
         """When the \"Upload Clan Emblem\" button is selected."""
+        # To upload your clan emblem, use the slash command "/billboard upload"
+        # and drag and drop your clan emblem.
+
 
     @discord.ui.select(
         custom_id='clan_inv',
@@ -69,11 +72,11 @@ class BillboardView(discord.ui.View):
         label='Cancel',
         style=discord.ButtonStyle.red)
     async def cancel_button(self,
-                            interaction: discord.Interaction,
-                            button: discord.ui.Button):
+                            _interaction: discord.Interaction,
+                            _button: discord.ui.Button):
         """When the \"Cancel\" button is selected."""
+        # Delete the message, cancelling the entire operation.
         await self.interaction.delete_original_response()
-
 
 class BillboardClanModal(discord.ui.Modal):
     """The modal used to enter the details for the Billboard ad."""

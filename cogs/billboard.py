@@ -46,7 +46,7 @@ class BillBoardCommands(commands.Cog):
             # await interaction.response.send_modal(BillboardClanModal(
             #     interaction.guild, interaction.user))
             await interaction.response.send_message(
-                content='',
+                content='Your ad will be previewed here.',
                 view=view
             )
         elif choices.value == 'edit':

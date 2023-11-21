@@ -40,7 +40,7 @@ async def ping(interaction: discord.Interaction):
         f"Pong! ({round(client.latency * 1000)}ms)")
 
 @client.command()
-async def sync(ctx):
+async def sync(_ctx):
     """Syncs the global commands."""
     try:
         command_list = await client.tree.sync()
