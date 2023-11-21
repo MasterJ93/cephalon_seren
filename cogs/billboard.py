@@ -17,7 +17,8 @@ class BillBoardCommands(commands.Cog):
         self.bot = bot
 
     @app_commands.command(name="billboard")
-    @app_commands.choices(choices=[
+    @app_commands.describe(select='What would you like to do?')
+    @app_commands.choices(select=[
             app_commands.Choice(
                 name="Create Ad", value="create"),
             app_commands.Choice(
@@ -29,7 +30,7 @@ class BillBoardCommands(commands.Cog):
     async def billboard_command(self,
                                 interaction: discord.Interaction,
                                 # attachment: discord.Attachment,
-                                choices: app_commands.Choice[str]):
+                                select: app_commands.Choice[str]):
         """
         Create or edit a billboard ad.
         """
@@ -37,7 +38,7 @@ class BillBoardCommands(commands.Cog):
         billboard_channel = guild.get_channel( #type: ignore
                 settings['CHANNEL_ID']['ALLIANCE_BILLBOARD'])
 
-        if choices.value == 'create':
+        if select.value == 'create':
             # await billboard_channel.send( #type: ignore
             #     content='',
             #     embed=Embed()
@@ -49,6 +50,6 @@ class BillBoardCommands(commands.Cog):
                 content='Your ad will be previewed here.',
                 view=view
             )
-        elif choices.value == 'edit':
+        elif select.value == 'edit':
             # message = await billboard_channel.fetch_message()
             pass
