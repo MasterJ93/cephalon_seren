@@ -44,7 +44,9 @@ async def sync(_ctx):
     """Syncs the global commands."""
     try:
         command_list = await client.tree.sync()
-        print(f'Commands: {command_list}')
+        command_names = [command.name for command in command_list]
+        print(f'Commands: {command_names}')
+
         print('Commands have been synced.')
     except discord.DiscordException as err:
         print(err)
