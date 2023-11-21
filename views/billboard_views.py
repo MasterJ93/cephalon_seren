@@ -15,10 +15,10 @@ class BillboardView(discord.ui.View):
 
     options = [
         discord.SelectOption(
-            label="We're not accepting clan invites right now."
+            label="We're not accepting invite requests right now."
         ),
         discord.SelectOption(
-            label="We're currently accepting invites."
+            label="We're currently accepting invite requests."
         ),
         discord.SelectOption(
             label="We currently can't add any new members."

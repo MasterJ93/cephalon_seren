@@ -19,9 +19,9 @@ class BillBoardCommands(commands.Cog):
     @app_commands.command(name="billboard")
     @app_commands.choices(choices=[
             app_commands.Choice(
-                name="create", value="create"),
+                name="Create Ad", value="create"),
             app_commands.Choice(
-                name='edit', value="edit")
+                name='Edit Ad', value="edit")
     ])
     @app_commands.checks.has_any_role(
         settings['ROLE_ID']['WARLORD'],
