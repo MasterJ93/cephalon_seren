@@ -7,11 +7,11 @@ import discord
 class BillboardView(discord.ui.View):
     """docstring for BillboardView."""
     def __init__(self,
-                 guild,
-                 member):
+                 interaction):
         super().__init__()
-        self.guild = guild
-        self.member = member
+        self.interaction = interaction
+        self.guild = interaction.guild
+        self.member = interaction.user
 
     options = [
         discord.SelectOption(

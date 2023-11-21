@@ -42,7 +42,7 @@ class BillBoardCommands(commands.Cog):
             #     content='',
             #     embed=Embed()
             # )
-            view = BillboardView(guild, interaction.user)
+            view = BillboardView(interaction)
             # await interaction.response.send_modal(BillboardClanModal(
             #     interaction.guild, interaction.user))
             await interaction.response.send_message(
