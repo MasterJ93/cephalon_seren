@@ -9,11 +9,13 @@ from utils.messages import misc
 class BillboardView(discord.ui.View):
     """docstring for BillboardView."""
     def __init__(self,
-                 interaction):
+                 interaction,
+                 clan_emblem=None):
         super().__init__()
         self.interaction = interaction
         self.guild = interaction.guild
         self.member = interaction.user
+        self.clan_emblem = clan_emblem
 
     options = [
         discord.SelectOption(
