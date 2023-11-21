@@ -121,3 +121,23 @@ class BillboardClanModal(discord.ui.Modal):
 
     async def on_submit(self, interaction: discord.Interaction, /):
         """When the \"Submit\" button is selected."""
+        # Edit main message.
+        await self.interaction.edit_original_response( #type: ignore
+            content='It works!',
+            embed=Embed(
+                title='Shinobi of the Lotus',
+                description='\u200B'),
+            view=self.view
+        )
+
+        # Send message to user, stating it works
+        # (this is also used to dismiss the modal).
+        await interaction.response.send_message(
+            content="Information has been updated.",
+            ephemeral=True
+        )
+        # await interaction.edit_original_response(
+        #     content='Your ad will be previewed here.',
+        #     # embed=Embed(description=''),
+        #     view=self
+        # )
