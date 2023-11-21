@@ -3,7 +3,7 @@ Contains views related to commands related to managing billboard ads.
 """
 
 import discord
-from discord import Embed
+from discord import Color, Embed
 from utils.messages import misc
 
 class BillboardView(discord.ui.View):
@@ -122,11 +122,27 @@ class BillboardClanModal(discord.ui.Modal):
     async def on_submit(self, interaction: discord.Interaction, /):
         """When the \"Submit\" button is selected."""
         # Edit main message.
+        self.view.children[3].disabled = False
+
+        # Build the embed.
+        embed = Embed(
+            title=f"{self.clan_name.value}",
+            description=self.clan_description.value,
+            color=Color.red()
+        )
+        embed.add_field(
+            name='Invite Requirements',
+            value=self.clan_requirements.value,
+            inline=False
+        )
+        embed.add_field(
+            name="We're not taking new members.",
+            value="\u200B",
+            inline=True
+        )
         await self.interaction.edit_original_response( #type: ignore
             content='It works!',
-            embed=Embed(
-                title='Shinobi of the Lotus',
-                description='\u200B'),
+            embed=embed,
             view=self.view
         )
 

@@ -4,7 +4,7 @@ alliance-billboard channel.
 """
 
 import discord
-from discord import Embed, app_commands
+from discord import Embed, Color, app_commands
 from discord.ext import commands
 from config import settings
 from views.billboard_views import BillboardClanModal, BillboardView
@@ -44,11 +44,30 @@ class BillBoardCommands(commands.Cog):
             #     embed=Embed()
             # )
             view = BillboardView(interaction)
+
+            # Build the embed.
+            embed = Embed(
+                title="_Shinobi of the Lotus#141_",
+                description='\u200B',
+                color=Color.red()
+            )
+            embed.add_field(
+                name='Invite Requirements',
+                value='\u200B',
+                inline=False
+            )
+            embed.add_field(
+                name="_Select invite status from the dropdown below._",
+                value="\u200B",
+                inline=True
+            )
             # await interaction.response.send_modal(BillboardClanModal(
             #     interaction.guild, interaction.user))
             await interaction.response.send_message(
                 content='Your ad will be previewed here.',
-                view=view
+                embed=embed,
+                view=view,
+                ephemeral=True
             )
         elif select.value == 'edit':
             # message = await billboard_channel.fetch_message()
