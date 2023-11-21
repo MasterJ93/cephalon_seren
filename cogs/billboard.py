@@ -53,3 +53,26 @@ class BillBoardCommands(commands.Cog):
         elif select.value == 'edit':
             # message = await billboard_channel.fetch_message()
             pass
+
+    @app_commands.command(
+            name='emblem-upload',
+            description='Uploads a clan emblem to a billboard ad. ' \
+            '128x128px, .png/.jpg recommended.')
+    @app_commands.checks.has_any_role(
+        settings['ROLE_ID']['WARLORD'])
+    async def billboard_upload(self,
+                               interaction: discord.Interaction,
+                               attachment: discord.Attachment):
+        """Upload a clan emblem for the billboard ad."""
+        # Due to a Discord limitation, we can't simply click on the
+        # "Upload Clan Emblem" button and attach an image.
+        # To workaround this, we need to create this command. If the member
+        # doesn't have a clan ad being previewed or completed, then Seren
+        # will say you need to do that first.
+
+        # Checks if there's an ad made by the Alliance Warlord.
+
+        # Checks if there's an ad being previewed.
+
+        # If the above are not true, post an ephemeral message, stating they
+        # need to at least have an ad previewed first.
