@@ -3,6 +3,8 @@ Contains views related to commands related to managing billboard ads.
 """
 
 import discord
+from discord import Embed
+from utils.messages import misc
 
 class BillboardView(discord.ui.View):
     """docstring for BillboardView."""
@@ -33,10 +35,7 @@ class BillboardView(discord.ui.View):
                                _button: discord.ui.Button):
         """When the \"Enter Clan Information\" button is selected."""
         await interaction.response.send_modal(
-            BillboardClanModal(
-                self.guild,
-                self.member
-            )
+            BillboardClanModal(self.interaction, self)
         )
 
     @discord.ui.button(
@@ -44,13 +43,17 @@ class BillboardView(discord.ui.View):
         style=discord.ButtonStyle.blurple)
     async def upload_clan_emblem(self,
                                  interaction: discord.Interaction,
-                                 button: discord.ui.Button):
+                                 _button: discord.ui.Button):
         """When the \"Upload Clan Emblem\" button is selected."""
-        # To upload your clan emblem, use the slash command "/billboard upload"
-        # and drag and drop your clan emblem.
+        # Inform the member how to upload the clan emblem.
+        await interaction.response.send_message(
+            content=misc['UPLOAD_EMBLEM'],
+            ephemeral=True
+        )
 
 
     @discord.ui.select(
+        placeholder='Select invite status',
         custom_id='clan_inv',
         options=options
     )
@@ -80,10 +83,12 @@ class BillboardView(discord.ui.View):
 
 class BillboardClanModal(discord.ui.Modal):
     """The modal used to enter the details for the Billboard ad."""
-    def __init__(self, guild, member):
+    def __init__(self, interaction, view):
         super().__init__(title='Billboard Ad')
-        self.guild = guild
-        self.member = member
+        self.interaction = interaction
+        self.guild = interaction.guild
+        self.member = interaction.user
+        self.view = view
 
     clan_name = discord.ui.TextInput(
         label="Clan name (3-digits after \"#\")",
