@@ -13,6 +13,18 @@ class BillboardView(discord.ui.View):
         self.guild = guild
         self.member = member
 
+    options = [
+        discord.SelectOption(
+            label="We're not accepting clan invites right now."
+        ),
+        discord.SelectOption(
+            label="We're currently accepting invites."
+        ),
+        discord.SelectOption(
+            label="We currently can't add any new members."
+        )
+    ]
+
     @discord.ui.button(
         label='Enter Clan Information',
         style=discord.ButtonStyle.blurple)
@@ -35,9 +47,19 @@ class BillboardView(discord.ui.View):
                                  button: discord.ui.Button):
         """When the \"Upload Clan Emblem\" button is selected."""
 
+    @discord.ui.select(
+        custom_id='clan_inv',
+        options=options
+    )
+    async def clan_invite_dropdown(self,
+                                   interaction: discord.Interaction,
+                                   select: discord.ui.Select):
+        """When an option in the \"Clan Recruitment\" dropdown is selected."""
+
     @discord.ui.button(
         label='Post Ad',
-        style=discord.ButtonStyle.green)
+        style=discord.ButtonStyle.green,
+        disabled=True)
     async def post_ad_button(self,
                              interaction: discord.Interaction,
                              button: discord.ui.Button):
@@ -58,19 +80,6 @@ class BillboardClanModal(discord.ui.Modal):
         super().__init__(title='Billboard Ad')
         self.guild = guild
         self.member = member
-
-     # This is to allow `clan_invite` to access this variable.
-    options = [
-        discord.SelectOption(
-            label="We're not accepting clan invites right now."
-        ),
-        discord.SelectOption(
-            label="We're currently accepting invites."
-        ),
-        discord.SelectOption(
-            label="We currently can't add any new members."
-        )
-    ]
 
     clan_name = discord.ui.TextInput(
         label="Clan name (3-digits after \"#\")",
@@ -100,11 +109,6 @@ class BillboardClanModal(discord.ui.Modal):
         style=discord.TextStyle.long,
         required=False
     )
-
-    # clan_invite = discord.ui.Select(
-    #     custom_id='clan_inv',
-    #     options=options
-    # )
 
     async def on_submit(self, interaction: discord.Interaction, /):
         """When the \"Submit\" button is selected."""
