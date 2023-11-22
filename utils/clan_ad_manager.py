@@ -23,6 +23,13 @@ class IDAlreadyExistsException(Exception):
     A custom exception for handling cases where a clan ID already exists.
     """
 
+
+class IDNotFoundException(Exception):
+    """
+    A custom exception for handling cases where a clan ID hasn't been found.
+    """
+
+
 class ClanAdManager():
     """Accesses the clan ads within the \"clan_ad_db.py\" file."""
     def __init__(self, user_id):
@@ -62,6 +69,10 @@ class ClanAdManager():
         """
         Finds the dictionary entry for the clan ad.
         """
+        if user_id not in clan_ads:
+            raise IDNotFoundException(f"Couldn't find ID {user_id}.")
+
+        return clan_ads[user_id]
 
     def read(self, key=None, user_id=None):
         """
