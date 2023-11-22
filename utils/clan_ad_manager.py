@@ -17,6 +17,10 @@ class ClanAdKey(Enum):
     INVITE_STATUS = 'INVITE_STATUS'
     MESSAGE_ID = 'MESSAGE_ID'
 
+class IDAlreadyExistsException(Exception):
+    """
+    A custom exception for handling cases where a clan ID already exists.
+    """
 
 class ClanAdManager():
     """Accesses the clan ads within the \"clan_ad_db.py\" file."""
