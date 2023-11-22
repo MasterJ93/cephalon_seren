@@ -105,3 +105,9 @@ class ClanAdManager():
         """
         Deletes the entire clan ad's dictionary.
         """
+        user_id = self._get_user_id(user_id)
+
+        if user_id is not clan_ads:
+            raise IDNotFoundException(f"Couldn't find ID ({user_id}).")
+
+        del clan_ads[user_id]
