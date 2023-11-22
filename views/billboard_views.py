@@ -4,7 +4,7 @@ Contains views related to commands related to managing billboard ads.
 
 import discord
 from discord import Color, Embed
-from utils.messages import misc
+from utils.clan_ad_manager import ClanAdKey, ClanAdManager
 
 class BillboardView(discord.ui.View):
     """docstring for BillboardView."""
@@ -153,4 +153,55 @@ class BillboardClanModal(discord.ui.Modal):
         await interaction.response.send_message(
             content="Information has been updated.",
             ephemeral=True
+        )
+
+
+class AdPreview():
+    """This is to grab the values and update the clan ad."""
+    def __init__(self, interaction, view):
+        super().__init__()
+        self.interaction = interaction
+        self.view = view
+        self.member = interaction.user
+        self.guild = interaction.guild
+        self.manager = ClanAdManager(self.member.id)
+
+    async def edit_message(self, _content="", _ephemeral=True):
+        """
+        Edits the original message of the ad preview.
+        """
+        title = self.manager.read(ClanAdKey.NAME)
+        description = self.manager.read(ClanAdKey.DESCRIPTION)
+        requirements = self.manager.read(ClanAdKey.REQUIREMENTS)
+        clan_emblem_url = self.manager.read(ClanAdKey.CLAN_EMBLEM_URL)
+        invite_status = self.manager.read(ClanAdKey.INVITE_STATUS)
+        color = ""
+
+        # Change the colour depending on the invite status.
+        if self.manager.read(ClanAdKey.INVITE_STATUS) == '0x0':
+            color = Color.green()
+        else:
+            color = Color.red()
+
+        # Build the embed.
+        _embed = Embed(
+            title=title,
+            description=description,
+            color=color
+        )
+        _embed.add_field(
+            name='Invite Requirements',
+            value=requirements,
+            inline=False
+        )
+        _embed.add_field(
+            name=invite_status,
+            value="\u200B",
+            inline=True
+        )
+
+        await self.interaction.response.edit_original_response(
+            content=_content,
+            embed=_embed,
+            ephemeral=_ephemeral
         )
