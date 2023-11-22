@@ -67,6 +67,21 @@ class BillboardView(discord.ui.View):
                                    interaction: discord.Interaction,
                                    select: discord.ui.Select):
         """When an option in the \"Clan Recruitment\" dropdown is selected."""
+        # Update the temp database.
+        self.ad_manager.update(INVITE_STATUS=select.values[0])
+
+        # Update the ad preview.
+        await self.ad_preview.edit_message(
+            _content=("Here's the ad preview below." +
+                      "Select \"Post Ad\" when you're ready.")
+        )
+
+        # Send message to user, stating it works.
+        await interaction.response.send_message(
+            content="Preview has been updated.",
+            ephemeral=True
+        )
+
 
     @discord.ui.button(
         label='Post Ad',
