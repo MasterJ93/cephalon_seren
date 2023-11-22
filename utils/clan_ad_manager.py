@@ -3,6 +3,21 @@ Manages the clan ads temporarily when using the "/billboard Create Ad"
 Slash Command.
 """
 
+from enum import Enum
+
+
+class ClanAdKey(Enum):
+    """
+    Enum for defining valid keys in clan ad entries.
+    """
+    NAME = 'NAME'
+    DESCRIPTION = 'DESCRIPTION'
+    REQUIREMENTS = 'REQUIREMENTS'
+    CLAN_EMBLEM_URL = 'CLAN_EMBLEM_URL'
+    INVITE_STATUS = 'INVITE_STATUS'
+    MESSAGE_ID = 'MESSAGE_ID'
+
+
 class ClanAdManager():
     """Accesses the clan ads within the \"clan_ad_db.py\" file."""
     def __init__(self, user_id):
