@@ -5,6 +5,7 @@ Contains views related to commands related to managing billboard ads.
 import discord
 from discord import Color, Embed
 from utils.clan_ad_manager import ClanAdKey, ClanAdManager
+from utils.messages import clan_ad, misc
 
 class BillboardView(discord.ui.View):
     """docstring for BillboardView."""
@@ -91,6 +92,7 @@ class BillboardClanModal(discord.ui.Modal):
         self.guild = interaction.guild
         self.member = interaction.user
         self.view = view
+        self.ad_preview = AdPreview(interaction, view)
 
     clan_name = discord.ui.TextInput(
         label="Clan name (3-digits after \"#\")",
@@ -126,32 +128,16 @@ class BillboardClanModal(discord.ui.Modal):
         # Edit main message.
         self.view.children[3].disabled = False
 
-        # Build the embed.
-        embed = Embed(
-            title=f"{self.clan_name.value}",
-            description=self.clan_description.value,
-            color=Color.red()
-        )
-        embed.add_field(
-            name='Invite Requirements',
-            value=self.clan_requirements.value,
-            inline=False
-        )
-        embed.add_field(
-            name="We're not taking new members.",
-            value="\u200B",
-            inline=True
-        )
-        await self.interaction.edit_original_response( #type: ignore
-            content='It works!',
-            embed=embed,
-            view=self.view
+        # Update the ad preview.
+        await self.ad_preview.edit_message(
+            _content=("Here's the ad preview below." +
+                      "Select \"Post Ad\" when you're ready.")
         )
 
         # Send message to user, stating it works
         # (this is also used to dismiss the modal).
         await interaction.response.send_message(
-            content="Information has been updated.",
+            content="Preview has been updated.",
             ephemeral=True
         )
 
