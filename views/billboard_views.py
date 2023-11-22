@@ -128,7 +128,7 @@ class BillboardClanModal(discord.ui.Modal):
 
     async def on_submit(self, interaction: discord.Interaction, /):
         """When the \"Submit\" button is selected."""
-        # Edit main message.
+        # Enable the "Post Ad" message.
         self.view.children[3].disabled = False
 
         # Update the ad preview.
