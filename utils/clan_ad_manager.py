@@ -4,6 +4,7 @@ Slash Command.
 """
 
 from enum import Enum
+from database.clan_ad_db import clan_ads
 
 
 class ClanAdKey(Enum):
@@ -39,6 +40,23 @@ class ClanAdManager():
         """
         Creates a dictionary entry for the clan ad.
         """
+        user_id = self._get_user_id(user_id)
+
+        # If the user ID already exists, then an error is thrown.
+        if user_id in clan_ads:
+            raise IDAlreadyExistsException(f"ID {user_id} already exists.")
+
+        clan_ads[user_id] = {
+            'NAME': name,
+            'DESCRIPTION': description,
+            'REQUIREMENTS': requirements,
+            'CLAN_EMBLEM_URL': clan_emblem_url,
+            'INVITE_STATUS': invite_status,
+            'MESSAGE_ID': message_id
+        }
+
+        return clan_ads[user_id]
+
 
     def find(self, user_id: int):
         """
