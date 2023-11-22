@@ -49,7 +49,6 @@ class ClanAdManager():
         """
         user_id = self._get_user_id(user_id)
 
-        # If the user ID already exists, then an error is thrown.
         if user_id in clan_ads:
             raise IDAlreadyExistsException(f"ID {user_id} already exists.")
 
@@ -74,10 +73,17 @@ class ClanAdManager():
 
         return clan_ads[user_id]
 
-    def read(self, key=None, user_id=None):
+    def read(self, key: ClanAdKey, user_id=None):
         """
         Reads the dictionary for the clan ad.
         """
+        user_id = self._get_user_id(user_id)
+
+        if user_id not in clan_ads:
+            raise IDNotFoundException(f"ID {user_id} already exists.")
+
+        return clan_ads[user_id].get(key.value)
+
 
     def update(self, user_id=None, **kwargs):
         """
