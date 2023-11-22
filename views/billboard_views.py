@@ -203,5 +203,6 @@ class AdPreview():
         await self.interaction.response.edit_original_response(
             content=_content,
             embed=_embed,
-            ephemeral=_ephemeral
+            ephemeral=_ephemeral,
+            view=self.view
         )
