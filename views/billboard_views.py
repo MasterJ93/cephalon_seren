@@ -169,7 +169,7 @@ class AdPreview():
         color = ""
 
         # Change the colour depending on the invite status.
-        if invite_status == '0x0':
+        if self.manager.read(ClanAdKey.INVITE_STATUS) == '0x0':
             color = Color.green()
         else:
             color = Color.red()
