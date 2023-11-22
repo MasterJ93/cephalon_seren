@@ -174,11 +174,13 @@ class AdPreview():
         description = self.manager.read(ClanAdKey.DESCRIPTION)
         requirements = self.manager.read(ClanAdKey.REQUIREMENTS)
         clan_emblem_url = self.manager.read(ClanAdKey.CLAN_EMBLEM_URL)
-        invite_status = self.manager.read(ClanAdKey.INVITE_STATUS)
+        invite_status = clan_ad.get(
+            f'CLAN_AD_{self.manager.read(ClanAdKey.INVITE_STATUS)}'
+        )
         color = ""
 
         # Change the colour depending on the invite status.
-        if self.manager.read(ClanAdKey.INVITE_STATUS) == '0x0':
+        if invite_status == '0x0':
             color = Color.green()
         else:
             color = Color.red()
