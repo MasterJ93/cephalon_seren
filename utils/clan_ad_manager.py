@@ -91,7 +91,7 @@ class ClanAdManager():
         """
         user_id = self._get_user_id(user_id)
 
-        if user_id is not clan_ads:
+        if user_id not in clan_ads:
             raise IDNotFoundException(f"Couldn't find ID ({user_id}).")
 
         valid_keys = {key.value for key in ClanAdKey}
@@ -107,7 +107,7 @@ class ClanAdManager():
         """
         user_id = self._get_user_id(user_id)
 
-        if user_id is not clan_ads:
+        if user_id not in clan_ads:
             raise IDNotFoundException(f"Couldn't find ID ({user_id}).")
 
         del clan_ads[user_id]
