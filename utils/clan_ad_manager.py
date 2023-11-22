@@ -89,6 +89,17 @@ class ClanAdManager():
         """
         Updates a value for a key in the clan ad's dictionary.
         """
+        user_id = self._get_user_id(user_id)
+
+        if user_id is not clan_ads:
+            raise IDNotFoundException(f"Couldn't find ID ({user_id}).")
+
+        valid_keys = {key.value for key in ClanAdKey}
+        for key, value in kwargs.items():
+            if key.upper() in valid_keys and value is not None:
+                clan_ads[user_id][key.upper()] = value
+            elif key.upper() not in valid_keys:
+                raise ValueError(f"Key ({key}) is invalid.")
 
     def delete(self, user_id=None):
         """
