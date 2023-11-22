@@ -17,16 +17,26 @@ class ClanAdManager():
 
     def create(self, user_id=None, name="", description="", requirements="",
                clan_emblem_url="", invite_status="", message_id=0):
-        pass
+        """
+        Creates a dictionary entry for the clan ad.
+        """
 
-    def find(self, user_id=None):
-        pass
+    def find(self, user_id: int):
+        """
+        Finds the dictionary entry for the clan ad.
+        """
 
     def read(self, key=None, user_id=None):
-        pass
+        """
+        Reads the dictionary for the clan ad.
+        """
 
     def update(self, user_id=None, **kwargs):
-        pass
+        """
+        Updates a value for a key in the clan ad's dictionary.
+        """
 
     def delete(self, user_id=None):
-        pass
+        """
+        Deletes the entire clan ad's dictionary.
+        """
