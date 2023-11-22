@@ -84,8 +84,10 @@ class BillboardView(discord.ui.View):
                             _interaction: discord.Interaction,
                             _button: discord.ui.Button):
         """When the \"Cancel\" button is selected."""
-        # Delete the message, cancelling the entire operation.
+        # Delete the message and temp dictionary,
+        # cancelling the entire operation.
         await self.interaction.delete_original_response()
+        self.ad_manager.delete()
 
 class BillboardClanModal(discord.ui.Modal):
     """The modal used to enter the details for the Billboard ad."""
