@@ -4,6 +4,7 @@ Contains views related to commands related to managing billboard ads.
 
 import discord
 from discord import Color, Embed
+from utils import clan_ad_manager
 from utils.clan_ad_manager import ClanAdKey, ClanAdManager
 from utils.messages import clan_ad, misc
 
@@ -17,6 +18,15 @@ class BillboardView(discord.ui.View):
         self.guild = interaction.guild
         self.member = interaction.user
         self.clan_emblem = clan_emblem
+        self.ad_preview = AdPreview(interaction, self)
+        self.ad_manager = ClanAdManager(self.member.id)
+
+        # See if there's already a dictionary with the ID. If not, then
+        # create one.
+        try:
+            self.ad_manager.find(self.member.id)
+        except clan_ad_manager.IDNotFoundException:
+            self.ad_manager.create()
 
     options = [
         discord.SelectOption(
