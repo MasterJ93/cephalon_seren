@@ -235,7 +235,6 @@ class AdPreview():
             key=ClanAdKey.CLAN_EMBLEM_URL)
         status_code = await self.ad_manager.read(
             _id, key=ClanAdKey.INVITE_STATUS)
-        print(f"Status code: {status_code}")
         invite_status = clan_ad.get(
             f"CLAN_AD_{status_code}"
         )
