@@ -100,20 +100,6 @@ class ClanAdManager():
         await self._save_data()
         return self.clan_ads[user_id]
 
-    # async def find(self, user_id: int):
-    #     """
-    #     Finds the dictionary entry for the clan ad.
-    #     """
-    #     user_id_str = str(user_id)
-    #     async with self.lock:
-    #         print('Locking .find()')
-    #         if user_id_str not in self.clan_ads:
-    #             print("Couldn't find ID in .find()")
-    #             raise IDNotFoundException(
-    #                 f"Couldn't find ID ({user_id_str}).")
-
-    #     return self.clan_ads[user_id_str]
-
     async def read(self, user_id: str, key: Optional[ClanAdKey] = None):
         """
         Reads the dictionary for the clan ad. If key is provided,
