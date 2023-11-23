@@ -3,8 +3,8 @@ Manages the clan ads temporarily when using the "/billboard Create Ad"
 Slash Command.
 """
 
+import json
 from enum import Enum
-from database.clan_ad_db import clan_ads
 
 
 class ClanAdKey(Enum):
@@ -34,12 +34,24 @@ class ClanAdManager():
     """Accesses the clan ads within the \"clan_ad_db.py\" file."""
     def __init__(self, user_id):
         self.user_id = user_id
+        self.json_file = '../database/clan_ads_db.json'
+        self.clan_ads = self._load_data()
+
+    def _load_data(self):
+        try:
+            with open(self.json_file, 'r', encoding='utf-8') as file:
+                data = json.load(file)
+                return data.get("clan_ads", {})
+        except FileNotFoundError:
+            return {}
+
+    def _save_data(self):
+        with open(self.json_file, 'w', encoding='utf-8') as file:
+            data = {"clan_ads": self.clan_ads}
+            json.dump(data, file, indent=4)
 
     def _get_user_id(self, user_id=None):
-        """
-        Determines whether to use `id` or `self.user_id`, depending on if `user_id` is
-        not `None`.
-        """
+        print(f'user_id is {user_id}. self.user_id is {self.user_id}.')
         return user_id if user_id is not None else self.user_id
 
     def create(self, user_id=None, name="", description="", requirements="",
@@ -49,10 +61,10 @@ class ClanAdManager():
         """
         user_id = self._get_user_id(user_id)
 
-        if user_id in clan_ads:
+        if user_id in self.clan_ads:
             raise IDAlreadyExistsException(f"ID ({user_id}) already exists.")
 
-        clan_ads[user_id] = {
+        self.clan_ads[user_id] = {
             'NAME': name,
             'DESCRIPTION': description,
             'REQUIREMENTS': requirements,
@@ -60,18 +72,19 @@ class ClanAdManager():
             'INVITE_STATUS': invite_status,
             'MESSAGE_ID': message_id
         }
-
-        return clan_ads[user_id]
+        print(f'{user_id} has been created:\n{self.clan_ads[user_id]}')
+        self._save_data()
+        return self.clan_ads[user_id]
 
 
     def find(self, user_id: int):
         """
         Finds the dictionary entry for the clan ad.
         """
-        if user_id not in clan_ads:
+        if user_id not in self.clan_ads:
             raise IDNotFoundException(f"Couldn't find ID ({user_id}).")
 
-        return clan_ads[user_id]
+        return self.clan_ads[user_id]
 
     def read(self, key: ClanAdKey, user_id=None):
         """
@@ -79,10 +92,10 @@ class ClanAdManager():
         """
         user_id = self._get_user_id(user_id)
 
-        if user_id not in clan_ads:
+        if user_id not in self.clan_ads:
             raise IDNotFoundException(f"Couldn't find ID ({user_id}).")
 
-        return clan_ads[user_id].get(key.value)
+        return self.clan_ads[user_id].get(key.value)
 
 
     def update(self, user_id=None, **kwargs):
@@ -91,15 +104,17 @@ class ClanAdManager():
         """
         user_id = self._get_user_id(user_id)
 
-        if user_id not in clan_ads:
+        if user_id not in self.clan_ads:
             raise IDNotFoundException(f"Couldn't find ID ({user_id}).")
 
         valid_keys = {key.value for key in ClanAdKey}
         for key, value in kwargs.items():
             if key.upper() in valid_keys and value is not None:
-                clan_ads[user_id][key.upper()] = value
+                self.clan_ads[user_id][key.upper()] = value
             elif key.upper() not in valid_keys:
                 raise ValueError(f"Key ({key}) is invalid.")
+
+        self._save_data()
 
     def delete(self, user_id=None):
         """
@@ -107,7 +122,8 @@ class ClanAdManager():
         """
         user_id = self._get_user_id(user_id)
 
-        if user_id not in clan_ads:
+        if user_id not in self.clan_ads:
             raise IDNotFoundException(f"Couldn't find ID ({user_id}).")
 
-        del clan_ads[user_id]
+        del self.clan_ads[user_id]
+        self._save_data()
