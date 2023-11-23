@@ -59,7 +59,7 @@ async def sync(_ctx):
 initial_cogs = [
     Membership(client),
     AdminCommands(client),
-    BillBoardCommands(client)
+    BillBoardCommands(client, clan_ad_manager)
 ]
 
 for cog in initial_cogs:

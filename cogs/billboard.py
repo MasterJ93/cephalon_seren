@@ -13,8 +13,9 @@ class BillBoardCommands(commands.Cog):
     """
     BillboardCommands Cog for handling billboard ad management.
     """
-    def __init__(self, bot):
+    def __init__(self, bot, ad_manager):
         self.bot = bot
+        self.ad_manager = ad_manager
 
     @app_commands.command(name="billboard")
     @app_commands.describe(select='What would you like to do?')
@@ -39,11 +40,8 @@ class BillBoardCommands(commands.Cog):
                 settings['CHANNEL_ID']['ALLIANCE_BILLBOARD'])
 
         if select.value == 'create':
-            # await billboard_channel.send( #type: ignore
-            #     content='',
-            #     embed=Embed()
-            # )
-            view = BillboardView(interaction)
+            view = BillboardView(interaction, ad_manager=self.ad_manager)
+            await view.load()
 
             # Build the embed.
             embed = Embed(
