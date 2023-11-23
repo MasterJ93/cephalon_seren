@@ -11,22 +11,15 @@ from utils.messages import clan_ad, misc
 class BillboardView(discord.ui.View):
     """docstring for BillboardView."""
     def __init__(self,
-                 interaction,
+                 interaction, ad_manager,
                  clan_emblem=None):
         super().__init__()
         self.interaction = interaction
         self.guild = interaction.guild
         self.member = interaction.user
         self.clan_emblem = clan_emblem
-        self.ad_preview = AdPreview(interaction, self)
-        self.ad_manager = ClanAdManager(self.member.id)
-
-        # See if there's already a dictionary with the ID. If not, then
-        # create one.
-        try:
-            self.ad_manager.find(self.member.id)
-        except clan_ad_manager.IDNotFoundException:
-            self.ad_manager.create()
+        self.ad_manager = ad_manager
+        self.ad_preview = AdPreview(interaction, self, self.ad_manager)
 
     options = [
         discord.SelectOption(
@@ -43,6 +36,19 @@ class BillboardView(discord.ui.View):
         )
     ]
 
+    async def load(self):
+        """
+        Finds the dictionary from the ID. If it can't be found, then it
+        creates a new one.
+        """
+        await self.ad_manager.load_ads()
+
+        try:
+            await self.ad_manager.read(user_id=self.member.id)
+        except clan_ad_manager.IDNotFoundException:
+            print("Can't find ID; will now create one instead.")
+            await self.ad_manager.create(self.member.id)
+
     @discord.ui.button(
         label='Enter Clan Information',
         style=discord.ButtonStyle.blurple)
@@ -51,7 +57,7 @@ class BillboardView(discord.ui.View):
                                _button: discord.ui.Button):
         """When the \"Enter Clan Information\" button is selected."""
         await interaction.response.send_modal(
-            BillboardClanModal(self.interaction, self)
+            BillboardClanModal(self.interaction, self, self.ad_manager)
         )
 
     @discord.ui.button(
@@ -77,8 +83,11 @@ class BillboardView(discord.ui.View):
                                    interaction: discord.Interaction,
                                    select: discord.ui.Select):
         """When an option in the \"Clan Recruitment\" dropdown is selected."""
+        await self.ad_manager.load_ads()
         # Update the temp database.
-        self.ad_manager.update(INVITE_STATUS=select.values[0])
+        print(f'Selection: {select.values[0]}')
+        await self.ad_manager.update(self.member.id,
+            INVITE_STATUS=select.values[0])
 
         # Update the ad preview.
         await self.ad_preview.edit_message(
@@ -101,6 +110,13 @@ class BillboardView(discord.ui.View):
                              interaction: discord.Interaction,
                              button: discord.ui.Button):
         """When the \"Post Ad\" button is selected."""
+        # Send a message to the alliance-billboard channel
+        # with the embed and action buttons.
+
+        # Delete the message and temp dictionary.
+        await self.interaction.delete_original_response()
+        await self.ad_manager.load_ads()
+        await self.ad_manager.delete(self.member.id)
 
     @discord.ui.button(
         label='Cancel',
@@ -112,17 +128,19 @@ class BillboardView(discord.ui.View):
         # Delete the message and temp dictionary,
         # cancelling the entire operation.
         await self.interaction.delete_original_response()
-        self.ad_manager.delete()
+        await self.ad_manager.load_ads()
+        await self.ad_manager.delete(self.member.id)
 
 class BillboardClanModal(discord.ui.Modal):
     """The modal used to enter the details for the Billboard ad."""
-    def __init__(self, interaction, view):
+    def __init__(self, interaction, view, ad_manager):
         super().__init__(title='Billboard Ad')
         self.interaction = interaction
         self.guild = interaction.guild
         self.member = interaction.user
         self.view = view
-        self.ad_preview = AdPreview(interaction, view)
+        self.ad_preview = AdPreview(interaction, view, ad_manager)
+        self.ad_manager = ad_manager
 
     clan_name = discord.ui.TextInput(
         label="Clan name (3-digits after \"#\")",
@@ -158,6 +176,27 @@ class BillboardClanModal(discord.ui.Modal):
         # Enable the "Post Ad" message.
         self.view.children[3].disabled = False
 
+        # Retrieve existing values
+        ad_json = await self.ad_manager.read(user_id=self.member.id)
+        updates = {}
+
+        # Compare and prepare updates
+        print(f"Name: {self.clan_name.value} == {ad_json.get('NAME')}\n")
+        if self.clan_name.value != ad_json.get('NAME'):
+            updates['NAME'] = self.clan_name.value
+        print(f"Description: {self.clan_description.value} == {ad_json.get('DESCRIPTION')}\n")
+        if self.clan_description.value != ad_json.get('DESCRIPTION'):
+            updates['DESCRIPTION'] = self.clan_description.value
+        print(f"Requirements: {self.clan_requirements.value} == {ad_json.get('REQUIREMENTS')}\n")
+        if self.clan_requirements.value != ad_json.get('REQUIREMENTS'):
+            updates['REQUIREMENTS'] = self.clan_requirements.value
+
+
+        # Update values in dictionary if there are changes
+        print('About to update...')
+        if updates:
+            await self.ad_manager.update(self.member.id, **updates)
+
         # Update the ad preview.
         await self.ad_preview.edit_message(
             _content=("Here's the ad preview below." +
@@ -174,29 +213,37 @@ class BillboardClanModal(discord.ui.Modal):
 
 class AdPreview():
     """This is to grab the values and update the clan ad."""
-    def __init__(self, interaction, view):
+    def __init__(self, interaction, view, ad_manager: ClanAdManager):
         super().__init__()
         self.interaction = interaction
         self.view = view
         self.member = interaction.user
         self.guild = interaction.guild
-        self.manager = ClanAdManager(self.member.id)
+        self.ad_manager = ad_manager
 
-    async def edit_message(self, _content="", _ephemeral=True):
+    async def edit_message(self, _content=""):
         """
         Edits the original message of the ad preview.
         """
-        title = self.manager.read(ClanAdKey.NAME)
-        description = self.manager.read(ClanAdKey.DESCRIPTION)
-        requirements = self.manager.read(ClanAdKey.REQUIREMENTS)
-        clan_emblem_url = self.manager.read(ClanAdKey.CLAN_EMBLEM_URL)
+        _id = self.member.id
+        title = await self.ad_manager.read(_id, key=ClanAdKey.NAME)
+        description = await self.ad_manager.read(_id,
+                                                 key=ClanAdKey.DESCRIPTION)
+        requirements = await self.ad_manager.read(_id,
+                                                  key=ClanAdKey.REQUIREMENTS)
+        clan_emblem_url = await self.ad_manager.read(_id,
+            key=ClanAdKey.CLAN_EMBLEM_URL)
+        status_code = await self.ad_manager.read(
+            _id, key=ClanAdKey.INVITE_STATUS)
+        print(f"Status code: {status_code}")
         invite_status = clan_ad.get(
-            f'CLAN_AD_{self.manager.read(ClanAdKey.INVITE_STATUS)}'
+            f"CLAN_AD_{status_code}"
         )
         color = ""
 
         # Change the colour depending on the invite status.
-        if self.manager.read(ClanAdKey.INVITE_STATUS) == '0x0':
+        if await self.ad_manager.read(_id,
+            key=ClanAdKey.INVITE_STATUS) == '0x0':
             color = Color.green()
         else:
             color = Color.red()
@@ -218,9 +265,8 @@ class AdPreview():
             inline=True
         )
 
-        await self.interaction.response.edit_original_response(
+        await self.interaction.edit_original_response(
             content=_content,
             embed=_embed,
-            ephemeral=_ephemeral,
             view=self.view
         )
