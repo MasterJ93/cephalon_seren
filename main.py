@@ -10,6 +10,7 @@ from discord.ext import commands
 from cogs.membership import Membership
 from cogs.admin import AdminCommands
 from cogs.billboard import BillBoardCommands
+from utils.clan_ad_manager import ClanAdManager
 from config import settings
 
 logger = logging.getLogger(__name__)
@@ -21,11 +22,15 @@ intents.message_content = True
 client = commands.Bot(command_prefix=settings['COMMAND_PREFIX'],
                    intents=intents)
 
+# Create a shared instance of ClanAdManager
+clan_ad_manager = ClanAdManager()
+
 @client.event
 async def on_ready():
     """
     Called when the bot is ready.
     """
+    await clan_ad_manager.load_ads()
     print('Success!')
     logger.info("Successfully connected to Discord.")
 
