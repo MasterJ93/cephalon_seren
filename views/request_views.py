@@ -2,8 +2,10 @@
 Contains views related to requests made by members.
 """
 import discord
-from utils.messages import requests
+
 from config import settings
+from utils.messages import requests
+
 
 class DrifterInterestView(discord.ui.View):
     """

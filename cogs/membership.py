@@ -4,12 +4,15 @@ such as assigning roles to new members and sending them a message
 to inquire about their interest in joining the clan.
 """
 import asyncio
+
 import discord
 from discord import app_commands
 from discord.ext import commands
-from utils.messages import beginner, requests
+
 from config import settings
+from utils.messages import beginner, requests
 from views.beginner_views import OnboardView
+
 
 class Membership(commands.Cog):
     """

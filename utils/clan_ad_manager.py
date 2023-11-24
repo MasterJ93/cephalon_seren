@@ -5,9 +5,10 @@ Slash Command.
 
 import asyncio
 import json
-from enum import Enum
 import os
+from enum import Enum
 from typing import Optional
+
 import aiofiles
 
 

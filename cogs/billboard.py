@@ -4,14 +4,17 @@ alliance-billboard channel.
 """
 
 from typing import Optional
+
 import discord
-from discord import Embed, Color, app_commands
+from discord import Color, Embed, app_commands
 from discord.ext import commands
+
 from config import settings
-from utils.clan_ad_manager import ClanAdManager, ClanAdKey, \
+from utils.clan_ad_manager import ClanAdKey, ClanAdManager, \
     IDNotFoundException
 from utils.messages import clan_ad
 from views.billboard_views import BillboardView
+
 
 class BillBoardCommands(commands.Cog):
     """

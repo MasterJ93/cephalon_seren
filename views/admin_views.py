@@ -4,6 +4,7 @@ Contains views related to admin-only commands.
 
 import discord
 
+
 class WarnView(discord.ui.View):
     """
     Contains a view for the "warn" command.

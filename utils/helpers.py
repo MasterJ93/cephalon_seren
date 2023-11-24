@@ -1,6 +1,7 @@
 """Helper classes and methods."""
 import json
 
+
 class JSONRuleReader():
     """Reads rules in JSON for Cephalon Seren."""
     def __init__(self, json_file):

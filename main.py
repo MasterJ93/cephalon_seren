@@ -5,13 +5,15 @@ and starts the event loop.
 """
 import asyncio
 import logging
+
 import discord
 from discord.ext import commands
-from cogs.membership import Membership
+
 from cogs.admin import AdminCommands
 from cogs.billboard import BillBoardCommands
-from utils.clan_ad_manager import ClanAdManager
+from cogs.membership import Membership
 from config import settings
+from utils.clan_ad_manager import ClanAdManager
 
 logger = logging.getLogger(__name__)
 
