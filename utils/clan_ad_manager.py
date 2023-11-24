@@ -83,6 +83,9 @@ class ClanAdManager():
         """
         Creates a dictionary entry for the clan ad.
         """
+        # Cast user_id to a str.
+        user_id = str(user_id)
+
         async with self.lock:
             if user_id in self.clan_ads:
                 raise IDAlreadyExistsException(
@@ -106,6 +109,9 @@ class ClanAdManager():
         returns the specific value. Otherwise, returns the entire
         clan ad entry.
         """
+        # Cast user_id to a str.
+        user_id = str(user_id)
+
         async with self.lock:
             print('Locking .read()')
             print(f'self.clan_ads: {self.clan_ads}')
@@ -123,18 +129,21 @@ class ClanAdManager():
         """
         Updates a value for a key in the clan ad's dictionary.
         """
-        _user_id = str(user_id)
+        # Cast user_id to a str.
+        user_id = str(user_id)
+
         async with self.lock:
-            if _user_id not in self.clan_ads:
+            print(f"In update(), the clan_ads dictionary are of the following:\n{self.clan_ads}")
+            if user_id not in self.clan_ads:
                 print('Raising error in update().')
-                raise IDNotFoundException(f"Couldn't find ID ({_user_id}).")
+                raise IDNotFoundException(f"Couldn't find ID ({user_id}).")
 
             valid_keys = {key.value for key in ClanAdKey}
             print(f"value_keys: {valid_keys}")
             for key, value in kwargs.items():
                 print(f"Key-Value pair: ({key}), ({value})")
                 if key.upper() in valid_keys and value is not None:
-                    self.clan_ads[_user_id][key.upper()] = value
+                    self.clan_ads[user_id][key.upper()] = value
                 elif key.upper() not in valid_keys:
                     raise ValueError(f"Key ({key}) is invalid.")
 
@@ -144,6 +153,8 @@ class ClanAdManager():
         """
         Deletes the entire clan ad's dictionary.
         """
+        # Cast user_id to a str.
+        user_id = str(user_id)
 
         async with self.lock:
             if user_id not in self.clan_ads:
