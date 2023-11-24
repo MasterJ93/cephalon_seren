@@ -3,6 +3,7 @@ A list of commands related to managing ads in the
 alliance-billboard channel.
 """
 
+from typing import Optional
 import discord
 from discord import Embed, Color, app_commands
 from discord.ext import commands
@@ -21,7 +22,11 @@ class BillBoardCommands(commands.Cog):
         self.ad_manager = ad_manager
 
     @app_commands.command(name="billboard")
-    @app_commands.describe(select='What would you like to do?')
+    @app_commands.describe(
+        select='What would you like to do?',
+        clan_emblem='Upload a clan emblem to a billboard ad. ' \
+            '128x128px, .png/.jpg recommended.'
+        )
     @app_commands.choices(select=[
             app_commands.Choice(
                 name="Create Ad", value="create"),
@@ -33,7 +38,8 @@ class BillBoardCommands(commands.Cog):
         settings['ROLE_ID']['ADMIN'])
     async def billboard_command(self,
                                 interaction: discord.Interaction,
-                                select: app_commands.Choice[str]):
+                                select: app_commands.Choice[str],
+                                clan_emblem: Optional[discord.Attachment]):
         """
         Create or edit a billboard ad.
         """
