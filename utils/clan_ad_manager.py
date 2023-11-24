@@ -103,7 +103,7 @@ class ClanAdManager():
         await self._save_data()
         return self.clan_ads[user_id]
 
-    async def read(self, user_id: str, key: Optional[ClanAdKey] = None):
+    async def read(self, user_id, key: Optional[ClanAdKey] = None):
         """
         Reads the dictionary for the clan ad. If key is provided,
         returns the specific value. Otherwise, returns the entire
