@@ -7,13 +7,16 @@ import discord
 from discord import Embed, Color, app_commands
 from discord.ext import commands
 from config import settings
-from views.billboard_views import BillboardClanModal, BillboardView
+from utils.clan_ad_manager import ClanAdManager, ClanAdKey, \
+    IDNotFoundException
+from utils.messages import clan_ad
+from views.billboard_views import BillboardView
 
 class BillBoardCommands(commands.Cog):
     """
     BillboardCommands Cog for handling billboard ad management.
     """
-    def __init__(self, bot, ad_manager):
+    def __init__(self, bot, ad_manager: ClanAdManager):
         self.bot = bot
         self.ad_manager = ad_manager
 
@@ -30,17 +33,13 @@ class BillBoardCommands(commands.Cog):
         settings['ROLE_ID']['ADMIN'])
     async def billboard_command(self,
                                 interaction: discord.Interaction,
-                                # attachment: discord.Attachment,
                                 select: app_commands.Choice[str]):
         """
         Create or edit a billboard ad.
         """
-        guild = interaction.guild
-        billboard_channel = guild.get_channel( #type: ignore
-                settings['CHANNEL_ID']['ALLIANCE_BILLBOARD'])
+        view = BillboardView(interaction, ad_manager=self.ad_manager)
 
         if select.value == 'create':
-            view = BillboardView(interaction, ad_manager=self.ad_manager)
             await view.load()
 
             # Build the embed.
@@ -59,8 +58,7 @@ class BillBoardCommands(commands.Cog):
                 value="\u200B",
                 inline=True
             )
-            # await interaction.response.send_modal(BillboardClanModal(
-            #     interaction.guild, interaction.user))
+            embed.add_field(name="\u200B", value='_This is a sample._')
             await interaction.response.send_message(
                 content='Your ad will be previewed here.',
                 embed=embed,
@@ -68,8 +66,59 @@ class BillBoardCommands(commands.Cog):
                 ephemeral=True
             )
         elif select.value == 'edit':
-            # message = await billboard_channel.fetch_message()
-            pass
+            # self.ad_manager.loads()
+            member = interaction.user.id
+            await self.ad_manager.load_ads()
+            try:
+                await self.ad_manager.read(str(interaction.user.id))
+            except IDNotFoundException:
+                await interaction.response.send_message(
+                    content="It looks like you don't have an ad in the " \
+                        "alliance-billboard channel. Please use " \
+                        "\"/billboard Create Ad\" to create an ad.",
+                    ephemeral=True
+                )
+                return
+
+            title = await self.ad_manager.read(
+                str(member), key=ClanAdKey.NAME)
+            description = await self.ad_manager.read(
+                str(member), key=ClanAdKey.DESCRIPTION)
+            requirements = await self.ad_manager.read(
+                str(member), key=ClanAdKey.REQUIREMENTS)
+            clan_emblem_url = await self.ad_manager.read(
+                str(member), key=ClanAdKey.CLAN_EMBLEM_URL)
+            status_code = await self.ad_manager.read(
+                str(member), key=ClanAdKey.INVITE_STATUS)
+            invite_status = clan_ad.get(
+                f"CLAN_AD_{status_code}")
+
+            # Change the colour depending on the invite status.
+            color = Color.green() if await self.ad_manager.read(
+                str(member), key=ClanAdKey.INVITE_STATUS) == '0x0' else \
+                Color.red()
+
+            # Build the embed.
+            embed = Embed(
+                title=title, description=description, color=color
+            )
+            embed.add_field(
+                name='Invite Requirements', value=requirements, inline=False
+            )
+            embed.add_field(
+                name=invite_status, value="\u200B", inline=True
+            )
+            await interaction.response.send_message(
+                content="Here is the ad preview. Select " \
+                    "\"Post Ad\" when you're ready.",
+                    embed=embed,
+                    view=view,
+                    ephemeral=True
+            )
+
+            guild = interaction.guild
+            billboard_channel = guild.get_channel( #type: ignore
+                settings['CHANNEL_ID']['ALLIANCE_BILLBOARD'])
 
     @app_commands.command(
             name='emblem-upload',
