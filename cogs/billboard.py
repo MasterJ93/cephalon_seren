@@ -87,21 +87,21 @@ class BillBoardCommands(commands.Cog):
                 return
 
             title = await self.ad_manager.read(
-                str(member), key=ClanAdKey.NAME)
+                member, key=ClanAdKey.NAME)
             description = await self.ad_manager.read(
-                str(member), key=ClanAdKey.DESCRIPTION)
+                member, key=ClanAdKey.DESCRIPTION)
             requirements = await self.ad_manager.read(
-                str(member), key=ClanAdKey.REQUIREMENTS)
+                member, key=ClanAdKey.REQUIREMENTS)
             clan_emblem_url = await self.ad_manager.read(
-                str(member), key=ClanAdKey.CLAN_EMBLEM_URL)
+                member, key=ClanAdKey.CLAN_EMBLEM_URL)
             status_code = await self.ad_manager.read(
-                str(member), key=ClanAdKey.INVITE_STATUS)
+                member, key=ClanAdKey.INVITE_STATUS)
             invite_status = clan_ad.get(
                 f"CLAN_AD_{status_code}")
 
             # Change the colour depending on the invite status.
             color = Color.green() if await self.ad_manager.read(
-                str(member), key=ClanAdKey.INVITE_STATUS) == '0x0' else \
+                member, key=ClanAdKey.INVITE_STATUS) == '0x0' else \
                 Color.red()
 
             # Build the embed.
@@ -134,13 +134,23 @@ class BillBoardCommands(commands.Cog):
         settings['ROLE_ID']['WARLORD'])
     async def billboard_upload(self,
                                interaction: discord.Interaction,
-                               attachment: discord.Attachment):
+                               attachment: Optional[discord.Attachment]):
         """Upload a clan emblem for the billboard ad."""
         # Due to a Discord limitation, we can't simply click on the
         # "Upload Clan Emblem" button and attach an image.
         # To workaround this, we need to create this command. If the member
         # doesn't have a clan ad being previewed or completed, then Seren
         # will say you need to do that first.
+
+        # If the media type isn't a .jpg or .png, cancel the operation.
+        # if attachment.content_type is not 'image/jpeg' or \
+        #     attachment.content_type is not 'image/png':
+        #     await interaction.response.send_message(
+        #         content="This isn't a supported image format. Please " \
+        #         "upload a .jpg or .png file of your clan emblem.",
+        #         ephemeral=True
+        #     )
+        #     return
 
         # Checks if there's an ad made by the Alliance Warlord.
 
