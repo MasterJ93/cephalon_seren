@@ -79,7 +79,7 @@ class BillBoardCommands(commands.Cog):
                 inline=True
             )
             if resolved_attachment is not None:
-                embed.set_image(
+                embed.set_thumbnail(
                     url=f"attachment://{resolved_attachment.filename}"
                 )
             embed.add_field(name="\u200B", value='_This is a sample._')
