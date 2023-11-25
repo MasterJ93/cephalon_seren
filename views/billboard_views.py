@@ -119,7 +119,6 @@ class BillboardView(discord.ui.View):
         # Delete the message and temp dictionary.
         await self.interaction.delete_original_response()
         await self.ad_manager.load_ads()
-        await self.ad_manager.delete(self.member.id)
 
     @discord.ui.button(
         label='Cancel',
@@ -132,7 +131,6 @@ class BillboardView(discord.ui.View):
         # cancelling the entire operation.
         await self.interaction.delete_original_response()
         await self.ad_manager.load_ads()
-        await self.ad_manager.delete(self.member.id)
 
 class BillboardClanModal(discord.ui.Modal):
     """The modal used to enter the details for the Billboard ad."""
