@@ -37,7 +37,9 @@ class BillBoardCommands(commands.Cog):
             app_commands.Choice(
                 name="Create Ad", value="create"),
             app_commands.Choice(
-                name='Edit Ad', value="edit")
+                name="Edit Ad", value="edit"),
+            app_commands.Choice(
+                name="Delete Ad", value="delete")
     ])
     @app_commands.checks.has_any_role(
         settings['ROLE_ID']['WARLORD'],
@@ -144,6 +146,30 @@ class BillBoardCommands(commands.Cog):
             guild = interaction.guild
             billboard_channel = guild.get_channel( #type: ignore
                 settings['CHANNEL_ID']['ALLIANCE_BILLBOARD'])
+        elif select.value == 'delete':
+            # Check if there's a member ID. If not, send a message that
+            # it doesn't exist and end the operation.
+            member = interaction.user.id
+            await self.ad_manager.load_ads()
+
+            try:
+                await interaction.response.defer(ephemeral=True)
+                await self.ad_manager.delete(member)
+            except IDNotFoundException:
+                await interaction.response.defer(ephemeral=True)
+                content = "This message doesn't seem to exist. But if " \
+                    "that's not true, let an admin know."
+
+                # If there's an image trying to be uploaded, state
+                # this is useless.
+                if resolved_attachment is not None:
+                    content = f"{content} I also see a file. Since " \
+                        "you're deleting an ad, this isn't needed."
+
+                await interaction.response.send_message(
+                    content=content,
+                    ephemeral=True
+                )
 
     async def clan_emblem_handler(
             self,
