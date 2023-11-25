@@ -10,8 +10,11 @@ from discord import Color, Embed, app_commands
 from discord.ext import commands
 
 from config import settings
-from utils.clan_ad_manager import ClanAdKey, ClanAdManager, \
-    IDNotFoundException
+from utils.clan_ad_manager import (
+    ClanAdKey,
+    ClanAdManager
+)
+from utils.exceptions import InvalidFileType, IDNotFoundException
 from utils.messages import clan_ad
 from views.billboard_views import BillboardView
 
@@ -57,11 +60,8 @@ class BillBoardCommands(commands.Cog):
             )
         except InvalidFileType:
             return
-        
 
         if select.value == 'create':
-            await view.load()
-
             # Build the embed.
             embed = Embed(
                 title="_Shinobi of the Lotus#141_",

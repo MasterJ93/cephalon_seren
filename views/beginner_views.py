@@ -2,8 +2,10 @@
 Contains views related to members that just came into the server.
 """
 import discord
-from utils.messages import beginner
+
 from config import settings
+from utils.messages import beginner
+
 
 class OnboardView(discord.ui.View):
     """Contains a view for first-time members."""

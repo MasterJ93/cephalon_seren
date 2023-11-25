@@ -6,3 +6,15 @@ class InvalidFileType(Exception):
     """
     A custom Exception where an unsupported image format is detected.
     """
+
+
+class IDAlreadyExistsException(Exception):
+    """
+    A custom exception for handling cases where a clan ID already exists.
+    """
+
+
+class IDNotFoundException(Exception):
+    """
+    A custom exception for handling cases where a clan ID hasn't been found.
+    """
