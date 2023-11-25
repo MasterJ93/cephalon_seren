@@ -266,6 +266,10 @@ class AdPreview():
             value="\u200B",
             inline=True
         )
+        if clan_emblem_url != "":
+            _embed.set_thumbnail(
+                url=clan_emblem_url
+            )
 
         await self.interaction.edit_original_response(
             content=_content,
