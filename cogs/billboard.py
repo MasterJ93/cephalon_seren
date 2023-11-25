@@ -201,12 +201,12 @@ class BillBoardCommands(commands.Cog):
         # If the image is less than 150x150 px, send an ephemeral message,
         # saying that it's smaller than the recommended size, and it may be
         # hard to see.
-        if attachment.width < 150 and attachment.height < 150: #type: ignore
-            await interaction.response.send_message(
-                content="Looks like this clan emblem is pretty small. Just " \
-                "know that your emblem may not look as good since it's " \
-                "this small.",
-                ephemeral=True
-            )
+        # if attachment.width < 150 and attachment.height < 150: #type: ignore
+        #     await interaction.response.send_message(
+        #         content="Looks like this clan emblem is pretty small. Just " \
+        #         "know that your emblem may not look as good since it's " \
+        #         "this small.",
+        #         ephemeral=True
+        #     )
 
         return await attachment.to_file() #type: ignore
