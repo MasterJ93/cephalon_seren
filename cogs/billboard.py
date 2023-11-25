@@ -51,9 +51,6 @@ class BillBoardCommands(commands.Cog):
         """
         Create or edit a billboard ad.
         """
-        view = BillboardView(interaction, ad_manager=self.ad_manager)
-        await view.load()
-
         # If the checks fail for whatever reason, stop running the
         # Slash Command.
         try:
@@ -63,7 +60,13 @@ class BillBoardCommands(commands.Cog):
         except InvalidFileType:
             return
 
+        member = interaction.user.id
+        view = BillboardView(
+            interaction, ad_manager=self.ad_manager)
+        await view.load()
+
         if select.value == 'create':
+            await interaction.response.defer(ephemeral=True)
             # Build the embed.
             embed = Embed(
                 title="_Shinobi of the Lotus#141_",
@@ -180,6 +183,10 @@ class BillBoardCommands(commands.Cog):
         # the Slash Command. Discord's current limitations prevent
         # re-uploading an image directly for updates. To change the
         # clan emblem image, users must use the Slash Command again.
+
+        # If there's no attachment, end this method.
+        if attachment is None:
+            return
 
         # If the media type isn't a .jpg or .png, cancel the operation.
         if (attachment.content_type != 'image/jpeg' #type: ignore
