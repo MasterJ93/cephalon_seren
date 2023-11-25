@@ -88,19 +88,34 @@ class BillBoardCommands(commands.Cog):
                     url=f"attachment://{resolved_attachment.filename}"
                 )
             embed.add_field(name="\u200B", value='_This is a sample._')
-            await interaction.response.send_message(
+            message = await interaction.followup.send(
                 content='Your ad will be previewed here.',
                 file=resolved_attachment, #type: ignore
                 embed=embed,
                 view=view,
                 ephemeral=True
             )
+
+            # Grab image URL for adding to the database (if it exists).
+            message_embeds = message.embeds[0] #type: ignore
+            file_url = (message_embeds.thumbnail.proxy_url #type: ignore
+                        if message_embeds.thumbnail.proxy_url #type: ignore
+                        else None)
+            if file_url is None:
+                return
+
+            print(f"File URL: {file_url}")
+            updates={}
+            updates[ClanAdKey.CLAN_EMBLEM_URL.name] = file_url
+
+            if updates:
+                await self.ad_manager.update(member, **updates)
+
         elif select.value == 'edit':
             # self.ad_manager.loads()
-            member = interaction.user.id
             await self.ad_manager.load_ads()
             try:
-                await self.ad_manager.read(str(interaction.user.id))
+                await self.ad_manager.read(member)
             except IDNotFoundException:
                 await interaction.response.send_message(
                     content="It looks like you don't have an ad in the " \
