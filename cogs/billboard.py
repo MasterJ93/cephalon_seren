@@ -47,6 +47,17 @@ class BillBoardCommands(commands.Cog):
         Create or edit a billboard ad.
         """
         view = BillboardView(interaction, ad_manager=self.ad_manager)
+        await view.load()
+
+        # If the checks fail for whatever reason, stop running the
+        # Slash Command.
+        try:
+            resolved_attachment = await self.clan_emblem_handler(
+                interaction, clan_emblem
+            )
+        except InvalidFileType:
+            return
+        
 
         if select.value == 'create':
             await view.load()
@@ -67,9 +78,14 @@ class BillBoardCommands(commands.Cog):
                 value="\u200B",
                 inline=True
             )
+            if resolved_attachment is not None:
+                embed.set_image(
+                    url=f"attachment://{resolved_attachment.filename}"
+                )
             embed.add_field(name="\u200B", value='_This is a sample._')
             await interaction.response.send_message(
                 content='Your ad will be previewed here.',
+                file=resolved_attachment, #type: ignore
                 embed=embed,
                 view=view,
                 ephemeral=True
@@ -129,35 +145,35 @@ class BillBoardCommands(commands.Cog):
             billboard_channel = guild.get_channel( #type: ignore
                 settings['CHANNEL_ID']['ALLIANCE_BILLBOARD'])
 
-    @app_commands.command(
-            name='emblem-upload',
-            description='Uploads a clan emblem to a billboard ad. ' \
-            '128x128px, .png/.jpg recommended.')
-    @app_commands.checks.has_any_role(
-        settings['ROLE_ID']['WARLORD'])
-    async def billboard_upload(self,
-                               interaction: discord.Interaction,
-                               attachment: Optional[discord.Attachment]):
-        """Upload a clan emblem for the billboard ad."""
-        # Due to a Discord limitation, we can't simply click on the
-        # "Upload Clan Emblem" button and attach an image.
-        # To workaround this, we need to create this command. If the member
-        # doesn't have a clan ad being previewed or completed, then Seren
-        # will say you need to do that first.
+    async def clan_emblem_handler(
+            self,
+            interaction: discord.Interaction,
+            attachment: Optional[discord.Attachment]):
+        """Handles the Clan Emblem being uploaded."""
+        # This method is dedicated to handling image attachments for
+        # the Slash Command. Discord's current limitations prevent
+        # re-uploading an image directly for updates. To change the
+        # clan emblem image, users must use the Slash Command again.
 
         # If the media type isn't a .jpg or .png, cancel the operation.
-        # if attachment.content_type is not 'image/jpeg' or \
-        #     attachment.content_type is not 'image/png':
-        #     await interaction.response.send_message(
-        #         content="This isn't a supported image format. Please " \
-        #         "upload a .jpg or .png file of your clan emblem.",
-        #         ephemeral=True
-        #     )
-        #     return
+        if (attachment.content_type != 'image/jpeg' #type: ignore
+            and attachment.content_type != 'image/png'): #type: ignore
+            await interaction.response.send_message(
+                content="This isn't a supported image format. Please " \
+                    "upload a .jpg or .png file of your clan emblem.",
+                    ephemeral=True
+            )
+            raise InvalidFileType("Unsupported image format.")
 
-        # Checks if there's an ad made by the Alliance Warlord.
+        # If the image is less than 150x150 px, send an ephemeral message,
+        # saying that it's smaller than the recommended size, and it may be
+        # hard to see.
+        if attachment.width < 150 and attachment.height < 150: #type: ignore
+            await interaction.response.send_message(
+                content="Looks like this clan emblem is pretty small. Just " \
+                "know that your emblem may not look as good since it's " \
+                "this small.",
+                ephemeral=True
+            )
 
-        # Checks if there's an ad being previewed.
-
-        # If the above are not true, post an ephemeral message, stating they
-        # need to at least have an ad previewed first.
+        return await attachment.to_file() #type: ignore
