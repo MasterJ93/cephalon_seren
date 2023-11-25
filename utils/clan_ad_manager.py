@@ -14,7 +14,7 @@ import aiofiles
 from utils.exceptions import (
     IDAlreadyExistsException,
     IDNotFoundException
-    )
+)
 
 
 class ClanAdKey(Enum):
