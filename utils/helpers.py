@@ -63,19 +63,28 @@ class URLParser():
     """
     Helper class that parses URLs to use in grabbing the file name.
     """
-    def get_file_name(self, url):
+    def get_file_name(self, url, only_protocol=False):
         """Parses a URL to get the resulting file name.
 
         Args:
+            Args:
             url (str): The URL to parse.
+            only_protocol (bool): If True, only removes the
+            protocol from the URL.
         """
-        # Parse the URL to get the path
+        # Parse the URL
         parsed_url = urlparse(url)
-        path = parsed_url.path
+
+        # Only the protocol if 'only_protocol' is set to True.
+        if only_protocol:
+            return (
+                parsed_url.netloc + parsed_url.path +
+                parsed_url.query + parsed_url.fragment
+            )
 
         # Extract the file name from the path
+        path = parsed_url.path
         file_name = unquote(path.split('/')[-1])
-
         return file_name
 
 class ImgDownloader():
