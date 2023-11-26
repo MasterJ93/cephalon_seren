@@ -83,10 +83,14 @@ class BillBoardCommands(commands.Cog):
                 value="\u200B",
                 inline=True
             )
-            if resolved_attachment is not None:
+            if resolved_attachment is not None or resolved_attachment == '':
                 embed.set_thumbnail(
                     url=f"attachment://{resolved_attachment.filename}"
                 )
+                print('resolved_attachment is not None.')
+            else:
+                print('resolved_attachment is None.')
+                resolved_attachment=MISSING
             embed.add_field(name="\u200B", value='_This is a sample._')
             message = await interaction.followup.send(
                 content='Your ad will be previewed here.',

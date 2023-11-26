@@ -227,13 +227,17 @@ class AdPreview():
         """
         Edits the original message of the ad preview.
         """
+
         _id = self.member.id
         title = await self.ad_manager.read(_id, key=ClanAdKey.NAME)
-        description = await self.ad_manager.read(_id,
-                                                 key=ClanAdKey.DESCRIPTION)
-        requirements = await self.ad_manager.read(_id,
-                                                  key=ClanAdKey.REQUIREMENTS)
-        clan_emblem_url = await self.ad_manager.read(_id,
+        description = await self.ad_manager.read(
+            _id,
+            key=ClanAdKey.DESCRIPTION)
+        requirements = await self.ad_manager.read(
+            _id,
+            key=ClanAdKey.REQUIREMENTS)
+        clan_emblem_url = await self.ad_manager.read(
+            _id,
             key=ClanAdKey.CLAN_EMBLEM_URL)
         status_code = await self.ad_manager.read(
             _id, key=ClanAdKey.INVITE_STATUS)
@@ -248,6 +252,18 @@ class AdPreview():
             color = Color.green()
         else:
             color = Color.red()
+
+        # Grab the URL from Discord to use as the file to upload to
+        # the real post.
+        emblem_img = None
+        try:
+            emblem_img = await ImgDownloader().download(clan_emblem_url)
+        except exceptions.RequestFailedException:
+            await self.interaction.send(
+                content="It looks like something went wrong. We may have " \
+                "to start again. I'm sorry."
+            )
+            return
 
         # Build the embed.
         _embed = Embed(
@@ -265,13 +281,22 @@ class AdPreview():
             value="\u200B",
             inline=True
         )
-        if clan_emblem_url != "":
+        _file = File
+        if clan_emblem_url != "" and emblem_img is not None:
+            file_name=URLParser().get_file_name(clan_emblem_url)
             _embed.set_thumbnail(
-                url=clan_emblem_url
+                url=f"attachment://{file_name}"
             )
+
+            _file=File(
+                emblem_img, URLParser().get_file_name(url=file_name))
+        else:
+            clan_emblem_url=None
+            _file=None
 
         await self.interaction.edit_original_response(
             content=_content,
             embed=_embed,
+            attachments=[_file],
             view=self.view
         )
