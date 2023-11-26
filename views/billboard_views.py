@@ -3,11 +3,12 @@ Contains views related to commands related to managing billboard ads.
 """
 
 import discord
-from discord import Color, Embed
+from discord import Color, Embed, File
 
 from config import settings
-from utils import clan_ad_manager
+from utils import clan_ad_manager, exceptions
 from utils.clan_ad_manager import ClanAdKey, ClanAdManager
+from utils.helpers import URLParser, ImgDownloader
 from utils.messages import clan_ad, misc
 
 

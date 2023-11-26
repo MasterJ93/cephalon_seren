@@ -60,6 +60,25 @@ class JSONRuleReader():
 
         return rule_string
 
+class URLParser():
+    """
+    Helper class that parses URLs to use in grabbing the file name.
+    """
+    def get_file_name(self, url):
+        """Parses a URL to get the resulting file name.
+
+        Args:
+            url (str): The URL to parse.
+        """
+        # Parse the URL to get the path
+        parsed_url = urlparse(url)
+        path = parsed_url.path
+
+        # Extract the file name from the path
+        file_name = unquote(path.split('/')[-1])
+
+        return file_name
+
 class ImgDownloader():
     """Downloads images from the server."""
 
