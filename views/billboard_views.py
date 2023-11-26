@@ -95,7 +95,7 @@ class BillboardView(discord.ui.View):
 
         # Update the ad preview.
         await self.ad_preview.edit_message(
-            _content=("Here's the ad preview below." +
+            _content=("Here's the ad preview below. " +
                       "Select \"Post Ad\" when you're ready.")
         )
 
@@ -201,7 +201,7 @@ class BillboardClanModal(discord.ui.Modal):
 
         # Update the ad preview.
         await self.ad_preview.edit_message(
-            _content=("Here's the ad preview below." +
+            _content=("Here's the ad preview below. " +
                       "Select \"Post Ad\" when you're ready.")
         )
 
