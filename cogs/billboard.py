@@ -7,6 +7,7 @@ from typing import Optional
 
 import discord
 from discord import Color, Embed, app_commands
+from discord.abc import MISSING
 from discord.ext import commands
 
 from config import settings
@@ -165,9 +166,7 @@ class BillBoardCommands(commands.Cog):
                     ephemeral=True
             )
 
-            guild = interaction.guild
-            billboard_channel = guild.get_channel( #type: ignore
-                settings['CHANNEL_ID']['ALLIANCE_BILLBOARD'])
+
         elif select.value == 'delete':
             # Check if there's a member ID. If not, send a message that
             # it doesn't exist and end the operation.

@@ -112,7 +112,7 @@ class BillboardView(discord.ui.View):
         disabled=True)
     async def post_ad_button(self,
                              interaction: discord.Interaction,
-                             button: discord.ui.Button):
+                             _button: discord.ui.Button):
         """When the \"Post Ad\" button is selected."""
         # Send a message to the alliance-billboard channel
         # with the embed and action buttons.

@@ -1,5 +1,4 @@
 """Helper classes and methods."""
-import asyncio
 import io
 import json
 from urllib.parse import unquote, urlparse
