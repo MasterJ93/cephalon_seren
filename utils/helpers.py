@@ -1,5 +1,12 @@
 """Helper classes and methods."""
+import asyncio
+import io
 import json
+from urllib.parse import unquote, urlparse
+
+import aiohttp
+
+from utils.exceptions import RequestFailedException
 
 
 class JSONRuleReader():
@@ -52,3 +59,14 @@ class JSONRuleReader():
             rule_string += f'> {rule}\n'
 
         return rule_string
+
+class ImgDownloader():
+    """Downloads images from the server."""
+
+    async def download(self, url):
+        """Downloads the image from the URL."""
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as resp:
+                if resp.status != 200:
+                    raise RequestFailedException()
+                return io.BytesIO(await resp.read())

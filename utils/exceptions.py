@@ -18,3 +18,8 @@ class IDNotFoundException(Exception):
     """
     A custom exception for handling cases where a clan ID hasn't been found.
     """
+
+class RequestFailedException(Exception):
+    """
+    A custom exception for handling cases where a web request has failed.
+    """
