@@ -145,8 +145,8 @@ class BillboardClanModal(discord.ui.Modal):
         self.ad_manager = ad_manager
 
     clan_name = discord.ui.TextInput(
-        label="Clan name (3-digits after \"#\")",
-        placeholder='Shinobi of the Lotus#141',
+        label="Clan name",
+        placeholder='Shinobi of the Lotus',
         custom_id='clan_name',
         min_length=5,
         max_length=100,
