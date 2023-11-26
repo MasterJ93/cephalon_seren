@@ -116,6 +116,85 @@ class BillboardView(discord.ui.View):
         """When the \"Post Ad\" button is selected."""
         # Send a message to the alliance-billboard channel
         # with the embed and action buttons.
+        await interaction.response.defer(ephemeral=True)
+
+        guild = interaction.guild
+        billboard_channel = guild.get_channel( #type: ignore
+                settings['CHANNEL_ID']['ALLIANCE_BILLBOARD'])
+        print(f"Alliance billboard: {billboard_channel}")
+        _id = self.member.id
+        title = await self.ad_manager.read(_id, key=ClanAdKey.NAME)
+        description = await self.ad_manager.read(
+            _id, key=ClanAdKey.DESCRIPTION
+        )
+        requirements = await self.ad_manager.read(
+            _id, key=ClanAdKey.REQUIREMENTS
+        )
+        clan_emblem_url = await self.ad_manager.read(
+            _id, key=ClanAdKey.CLAN_EMBLEM_URL
+        )
+        status_code = await self.ad_manager.read(
+            _id, key=ClanAdKey.INVITE_STATUS
+        )
+        invite_status = clan_ad.get(
+            f"CLAN_AD_{status_code}"
+        )
+        color = ""
+
+        # Change the colour depending on the invite status.
+        if await self.ad_manager.read(_id,
+            key=ClanAdKey.INVITE_STATUS) == '0x0':
+            color = Color.green()
+        else:
+            color = Color.red()
+
+        # Grab the URL from Discord to use as the file to upload to
+        # the real post.
+        emblem_img = None
+        try:
+            emblem_img = await ImgDownloader().download(clan_emblem_url)
+        except exceptions.RequestFailedException:
+            await self.interaction.send(
+                content="It looks like something went wrong. We may have " \
+                "to start again. I'm sorry."
+            )
+            return
+
+        # Build the embed.
+        _embed = Embed(
+            title=title,
+            description=description,
+            color=color
+        )
+        _embed.add_field(
+            name='Invite Requirements',
+            value=requirements,
+            inline=False
+        )
+        _embed.add_field(
+            name=invite_status,
+            value="\u200B",
+            inline=True
+        )
+
+        _file = File
+        if clan_emblem_url != "" and emblem_img is not None:
+            file_name=URLParser().get_file_name(clan_emblem_url)
+            _embed.set_thumbnail(
+                url=f"attachment://{file_name}"
+            )
+
+            _file=File(
+                emblem_img, URLParser().get_file_name(url=file_name))
+        else:
+            clan_emblem_url=None
+            _file=None
+
+        await billboard_channel.send( #type: ignore
+            content="\u200B",
+            file=_file, #type: ignore
+            embed=_embed
+        )
 
         # Delete the message and temp dictionary.
         await self.interaction.delete_original_response()
