@@ -196,8 +196,7 @@ class BillboardView(discord.ui.View):
             clan_emblem_url=None
             _file=None
 
-        await billboard_channel.send( #type: ignore
-            content="\u200B",
+        await billboard_channel.send(content="\u200B", #type: ignore
             file=_file, #type: ignore
             embed=_embed
         )
@@ -368,16 +367,23 @@ class AdPreview:
             color=color
         )
 
-        embed.add_field(name='Invite Requirements',
-                        value=details[ClanAdKey.REQUIREMENTS], inline=False
-                        )
-        embed.add_field(name='Invite Status', value=invite_status_description, inline=True)
+        embed.add_field(
+            name='Invite Requirements',
+            value=details[ClanAdKey.REQUIREMENTS], inline=False)
+        embed.add_field(
+            name='Invite Status', value=invite_status_description,
+            inline=True
+            )
 
         if details[ClanAdKey.CLAN_EMBLEM_URL] and emblem_img:
-            file_name = self.url_parser.get_file_name(details[ClanAdKey.CLAN_EMBLEM_URL])
+            file_name = self.url_parser.get_file_name(
+                details[ClanAdKey.CLAN_EMBLEM_URL]
+                )
             embed.set_thumbnail(url=f"attachment://{file_name}")
 
         return embed
 
     async def _send_embed(self, embed, _content):
-        await self.interaction.edit_original_response(content=_content, embed=embed, view=self.view)
+        await self.interaction.edit_original_response(
+            content=_content, embed=embed, view=self.view
+            )
