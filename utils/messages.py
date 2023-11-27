@@ -16,7 +16,7 @@ beginner = {
     'DROPDOWN_OPTION_2': "I\'m joining a clan in this alliance.",
     'DROPDOWN_OPTION_3': "I\'m already a member of one of the clans.",
     'OPTION_1_RESPONSE': (
-        "Thanks for letting me know! I\'ll let an admin know and they\'ll"
+        "Thanks for letting me know! I\'ll let an admin know and they\'ll "
         "be with you soon."
         ),
     'OPTION_2_RESPONSE': (
