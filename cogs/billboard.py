@@ -31,7 +31,7 @@ class BillBoardCommands(commands.Cog):
     @app_commands.command(name="billboard")
     @app_commands.describe(
         select='What would you like to do?',
-        clan_emblem='Upload a clan emblem to a billboard ad. ' \
+        clan_emblem='Upload a clan emblem to a billboard ad. '
             '128x128px, .png/.jpg recommended.'
         )
     @app_commands.choices(select=[
@@ -123,8 +123,8 @@ class BillBoardCommands(commands.Cog):
                 await self.ad_manager.read(member)
             except IDNotFoundException:
                 await interaction.response.send_message(
-                    content="It looks like you don't have an ad in the " \
-                        "alliance-billboard channel. Please use " \
+                    content="It looks like you don't have an ad in the "
+                        "alliance-billboard channel. Please use "
                         "\"/billboard Create Ad\" to create an ad.",
                     ephemeral=True
                 )
@@ -159,7 +159,7 @@ class BillBoardCommands(commands.Cog):
                 name=invite_status, value="\u200B", inline=True
             )
             await interaction.response.send_message(
-                content="Here is the ad preview. Select " \
+                content="Here is the ad preview. Select "
                     "\"Post Ad\" when you're ready.",
                     embed=embed,
                     view=view,
@@ -178,14 +178,14 @@ class BillBoardCommands(commands.Cog):
                 await self.ad_manager.delete(member)
             except IDNotFoundException:
                 await interaction.response.defer(ephemeral=True)
-                content = "This message doesn't seem to exist. But if " \
-                    "that's not true, let an admin know."
+                content =("This message doesn't seem to exist. But if "
+                    "that's not true, let an admin know.")
 
                 # If there's an image trying to be uploaded, state
                 # this is useless.
                 if resolved_attachment is not None:
-                    content = f"{content} I also see a file. Since " \
-                        "you're deleting an ad, this isn't needed."
+                    content = (f"{content} I also see a file. Since "
+                        "you're deleting an ad, this isn't needed.")
 
                 await interaction.response.send_message(
                     content=content,
@@ -212,8 +212,8 @@ class BillBoardCommands(commands.Cog):
         if (attachment.content_type != 'image/jpeg' #type: ignore
             and attachment.content_type != 'image/png'): #type: ignore
             await interaction.response.send_message(
-                content="This isn't a supported image format. Please " \
-                    "upload a .jpg or .png file of your clan emblem.",
+                content=("This isn't a supported image format. Please "
+                    "upload a .jpg or .png file of your clan emblem."),
                     ephemeral=True
             )
             raise InvalidFileType("Unsupported image format.")
@@ -223,9 +223,9 @@ class BillBoardCommands(commands.Cog):
         # hard to see.
         # if attachment.width < 150 and attachment.height < 150: #type: ignore
         #     await interaction.response.send_message(
-        #         content="Looks like this clan emblem is pretty small. Just " \
-        #         "know that your emblem may not look as good since it's " \
-        #         "this small.",
+        #         content=()"Looks like this clan emblem is pretty small. Just "
+        #         "know that your emblem may not look as good since it's "
+        #         "this small."),
         #         ephemeral=True
         #     )
 

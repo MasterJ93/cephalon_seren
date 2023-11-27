@@ -37,7 +37,7 @@ async def on_ready():
     logger.info("Successfully connected to Discord.")
 
 @client.tree.command(name='ping',
-                     description='Sends the bot\'s '\
+                     description='Sends the bot\'s '
                      'frequency in milliseconds (ms).')
 async def ping(interaction: discord.Interaction):
     """

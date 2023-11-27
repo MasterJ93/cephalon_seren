@@ -161,7 +161,7 @@ class BillboardView(discord.ui.View):
             emblem_img = await ImgDownloader().download(clan_emblem_url)
         except exceptions.RequestFailedException:
             await self.interaction.send(
-                content="It looks like something went wrong. We may have " \
+                content="It looks like something went wrong. We may have "
                 "to start again. I'm sorry."
             )
             return
@@ -242,8 +242,8 @@ class BillboardClanModal(discord.ui.Modal):
 
     clan_description = discord.ui.TextInput(
         label="Write a description of your clan.",
-        placeholder="Shinobi of the Lotus is a clan that helps players be "\
-            "masters at movement and navigation.",
+        placeholder=("Shinobi of the Lotus is a clan that helps players be "
+            "masters at movement and navigation."),
         custom_id='clan_des',
         max_length=1024,
         style=discord.TextStyle.long,

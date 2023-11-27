@@ -63,7 +63,7 @@ class Membership(commands.Cog):
         )
 
     @app_commands.command(name='drifter-request',
-                          description='Request access to enter into '\
+                          description='Request access to enter into '
                           'the adult-only channels.')
     async def drifter_request(self, interaction: discord.Interaction):
         """
@@ -91,7 +91,7 @@ class Membership(commands.Cog):
         )
 
     @app_commands.command(name='operator-request',
-                          description='Adds or removes the Operator role ' \
+                          description='Adds or removes the Operator role '
                           'which adds or removes the alliance channels.'
                           )
     @app_commands.checks.has_role(settings['ROLE_ID']['DRIFTER'])
