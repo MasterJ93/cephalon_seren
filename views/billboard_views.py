@@ -292,90 +292,82 @@ class BillboardClanModal(discord.ui.Modal):
         )
 
 
-class AdPreview():
-    """This is to grab the values and update the clan ad."""
+class AdPreview:
+    """
+    This is to grab the values and update the clan ad.
+    """
     def __init__(self, interaction, view, ad_manager: ClanAdManager):
-        super().__init__()
         self.interaction = interaction
         self.view = view
         self.member = interaction.user
         self.guild = interaction.guild
         self.ad_manager = ad_manager
+        self.url_parser = URLParser()
+        self.img_downloader = ImgDownloader()
 
-    async def edit_message(self, _content=""):
+    async def edit_message(self, _content):
         """
         Edits the original message of the ad preview.
         """
+        member_id = self.member.id
+        clan_ad_details = await self._get_clan_ad_details(member_id)
+        color = self._determine_color(
+            clan_ad_details[ClanAdKey.INVITE_STATUS]
+            )
+        emblem_img = await self._download_emblem_image(
+            clan_ad_details[ClanAdKey.CLAN_EMBLEM_URL]
+            )
+        embed = self._build_embed(clan_ad_details, color, emblem_img)
+        await self._send_embed(embed, _content)
 
-        _id = self.member.id
-        title = await self.ad_manager.read(_id, key=ClanAdKey.NAME)
-        description = await self.ad_manager.read(
-            _id,
-            key=ClanAdKey.DESCRIPTION)
-        requirements = await self.ad_manager.read(
-            _id,
-            key=ClanAdKey.REQUIREMENTS)
-        clan_emblem_url = await self.ad_manager.read(
-            _id,
-            key=ClanAdKey.CLAN_EMBLEM_URL)
-        status_code = await self.ad_manager.read(
-            _id, key=ClanAdKey.INVITE_STATUS)
-        invite_status = clan_ad.get(
-            f"CLAN_AD_{status_code}"
-        )
-        color = ""
+    async def _get_clan_ad_details(self, member_id):
+        keys = [
+            ClanAdKey.NAME, ClanAdKey.DESCRIPTION, ClanAdKey.REQUIREMENTS,
+            ClanAdKey.CLAN_EMBLEM_URL, ClanAdKey.INVITE_STATUS
+            ]
+        return {
+            key: await self.ad_manager.read(
+                member_id, key=key
+                ) for key in keys
+                }
 
-        # Change the colour depending on the invite status.
-        if await self.ad_manager.read(_id,
-            key=ClanAdKey.INVITE_STATUS) == '0x0':
-            color = Color.green()
-        else:
-            color = Color.red()
+    def _determine_color(self, invite_status):
+        return Color.green() if invite_status == '0x0' else Color.red()
 
-        # Grab the URL from Discord to use as the file to upload to
-        # the real post.
-        emblem_img = None
+    async def _download_emblem_image(self, url):
         try:
-            emblem_img = await ImgDownloader().download(clan_emblem_url)
+            return await self.img_downloader.download(url)
         except exceptions.RequestFailedException:
             await self.interaction.send(
-                content="It looks like something went wrong. We may have " \
-                "to start again. I'm sorry."
+                content=("It looks like something went wrong. "
+                         "We may have to start again. I'm sorry.")
             )
-            return
+            return None
 
-        # Build the embed.
-        _embed = Embed(
-            title=title,
-            description=description,
+    def _build_embed(self, details, color, emblem_img):
+        # Set up the invite status.
+        invite_status_code = details[ClanAdKey.INVITE_STATUS]
+        invite_status_description = clan_ad.get(
+            f'CLAN_AD_{invite_status_code}', 'Unknown Status'
+        )
+
+        # Begin building the Embed.
+        embed = Embed(
+            title=details[ClanAdKey.NAME],
+            description=details[ClanAdKey.DESCRIPTION],
             color=color
         )
-        _embed.add_field(
-            name='Invite Requirements',
-            value=requirements,
-            inline=False
-        )
-        _embed.add_field(
-            name=invite_status,
-            value="\u200B",
-            inline=True
-        )
-        _file = File
-        if clan_emblem_url != "" and emblem_img is not None:
-            file_name=URLParser().get_file_name(clan_emblem_url)
-            _embed.set_thumbnail(
-                url=f"attachment://{file_name}"
-            )
 
-            _file=File(
-                emblem_img, URLParser().get_file_name(url=file_name))
-        else:
-            clan_emblem_url=None
-            _file=None
+        embed.add_field(name='Invite Requirements',
+                        value=details[ClanAdKey.REQUIREMENTS], inline=False
+                        )
+        embed.add_field(name='Invite Status', value=invite_status_description, inline=True)
 
-        await self.interaction.edit_original_response(
-            content=_content,
-            embed=_embed,
-            attachments=[_file],
-            view=self.view
-        )
+        if details[ClanAdKey.CLAN_EMBLEM_URL] and emblem_img:
+            file_name = self.url_parser.get_file_name(details[ClanAdKey.CLAN_EMBLEM_URL])
+            embed.set_thumbnail(url=f"attachment://{file_name}")
+
+        return embed
+
+    async def _send_embed(self, embed, _content):
+        await self.interaction.edit_original_response(content=_content, embed=embed, view=self.view)
