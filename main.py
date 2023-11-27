@@ -48,7 +48,9 @@ async def ping(interaction: discord.Interaction):
 
 @client.command()
 async def sync(_ctx):
-    """Syncs the global commands."""
+    """
+    Syncs the global commands.
+    """
     try:
         command_list = await client.tree.sync()
         command_names = [command.name for command in command_list]

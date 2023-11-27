@@ -54,7 +54,9 @@ class WarnView(discord.ui.View):
     async def rule_selection(self,
                              interaction: discord.Interaction,
                              select: discord.ui.Select):
-        """The dropdown menu that shows the TL;DR versions of the rules."""
+        """
+        The dropdown menu that shows the TL;DR versions of the rules.
+        """
         print(select.values)
 
         # Sort the items in ascending order.
@@ -85,7 +87,9 @@ class WarnView(discord.ui.View):
     async def send_message(self,
                            _interaction: discord.Interaction,
                            _button: discord.ui.Button):
-        """When the \"Send Message\" button is selected."""
+        """
+        When the \"Send Message\" button is selected.
+        """
         self.confirm=True
         print(self.values)
         self.stop()
@@ -96,7 +100,9 @@ class WarnView(discord.ui.View):
     async def cancel_button(self,
                            _interaction: discord.Interaction,
                            _button: discord.ui.Button):
-        """When the \"Cancel\" button is selected."""
+        """
+        When the \"Cancel\" button is selected.
+        """
         self.confirm=False
         self.stop()
 

@@ -1,4 +1,6 @@
-"""Helper classes and methods."""
+"""
+Helper classes and methods.
+"""
 import io
 import json
 from urllib.parse import unquote, urlparse
@@ -9,7 +11,9 @@ from utils.exceptions import RequestFailedException
 
 
 class JSONRuleReader():
-    """Reads rules in JSON for Cephalon Seren."""
+    """
+    Reads rules in JSON for Cephalon Seren.
+    """
     def __init__(self, json_file):
         super().__init__()
         self.json_file = json_file
@@ -31,7 +35,9 @@ class JSONRuleReader():
             return {"rules": []}
 
     def get_selected_rules(self, rule_numbers):
-        """Puts the selected rules into a list."""
+        """
+        Puts the selected rules into a list.
+        """
         selected_rules = []
         for rule in rule_numbers:
             # Extract the rule number from the string and convert it
@@ -88,10 +94,17 @@ class URLParser():
         return file_name
 
 class ImgDownloader():
-    """Downloads images from the server."""
+    """
+    Downloads images from the server.
+    """
 
     async def download(self, url):
-        """Downloads the image from the URL."""
+        """
+        Downloads the image from the URL.
+
+        Args:
+            url (str): The URL used to download the image.
+        """
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as resp:
                 if resp.status != 200:

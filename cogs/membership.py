@@ -66,7 +66,9 @@ class Membership(commands.Cog):
                           description='Request access to enter into '\
                           'the adult-only channels.')
     async def drifter_request(self, interaction: discord.Interaction):
-        """Requests access to enter into the adult-only channels."""
+        """
+        Requests access to enter into the adult-only channels.
+        """
 
         # Sends a request to access the clan channels as an adult
         # (instead of a a clan member).
@@ -94,7 +96,9 @@ class Membership(commands.Cog):
                           )
     @app_commands.checks.has_role(settings['ROLE_ID']['DRIFTER'])
     async def operator_request(self, interaction: discord.Interaction):
-        """Requests to add or remove the alliance-only channels."""
+        """
+        Requests to add or remove the alliance-only channels.
+        """
         # Pylance will complain that some of these things are of type
         # "None," which is incorrect. "# type: ignore"
         # will be used to stop it from lying to us.

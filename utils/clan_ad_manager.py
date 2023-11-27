@@ -30,7 +30,9 @@ class ClanAdKey(Enum):
 
 
 class ClanAdManager():
-    """Accesses the clan ads within the 'clan_ad_db.py' file."""
+    """
+    Accesses the clan ads within the 'clan_ad_db.py' file.
+    """
 
     def __init__(self):
         self.lock = asyncio.Lock()

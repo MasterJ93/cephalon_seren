@@ -196,7 +196,9 @@ class BillBoardCommands(commands.Cog):
             self,
             interaction: discord.Interaction,
             attachment: Optional[discord.Attachment]):
-        """Handles the Clan Emblem being uploaded."""
+        """
+        Handles the Clan Emblem being uploaded.
+        """
         # This method is dedicated to handling image attachments for
         # the Slash Command. Discord's current limitations prevent
         # re-uploading an image directly for updates. To change the

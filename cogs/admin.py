@@ -30,7 +30,9 @@ class AdminCommands(commands.Cog):
                           interaction: discord.Interaction,
                           member: discord.Member
                           ):
-        """Warns a member when they violate a rule."""
+        """
+        Warns a member when they violate a rule.
+        """
         view = WarnView(interaction, interaction.guild, member) #type: ignore
         await interaction.response.send_message(view=view)
         await view.wait()

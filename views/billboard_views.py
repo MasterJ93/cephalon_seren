@@ -13,7 +13,9 @@ from utils.messages import clan_ad, misc
 
 
 class BillboardView(discord.ui.View):
-    """docstring for BillboardView."""
+    """
+    Create's a view for the clan ad.
+    """
     def __init__(self,
                  interaction, ad_manager,
                  clan_emblem=None):
@@ -86,7 +88,9 @@ class BillboardView(discord.ui.View):
     async def clan_invite_dropdown(self,
                                    interaction: discord.Interaction,
                                    select: discord.ui.Select):
-        """When an option in the \"Clan Recruitment\" dropdown is selected."""
+        """
+        When an option in the \"Clan Recruitment\" dropdown is selected.
+        """
         await self.ad_manager.load_ads()
         # Update the temp database.
         print(f'Selection: {select.values[0]}')
@@ -113,7 +117,9 @@ class BillboardView(discord.ui.View):
     async def post_ad_button(self,
                              interaction: discord.Interaction,
                              _button: discord.ui.Button):
-        """When the \"Post Ad\" button is selected."""
+        """
+        When the \"Post Ad\" button is selected.
+        """
         # Send a message to the alliance-billboard channel
         # with the embed and action buttons.
         await interaction.response.defer(ephemeral=True)
@@ -213,7 +219,9 @@ class BillboardView(discord.ui.View):
         await self.ad_manager.load_ads()
 
 class BillboardClanModal(discord.ui.Modal):
-    """The modal used to enter the details for the Billboard ad."""
+    """
+    The modal used to enter the details for the Billboard ad.
+    """
     def __init__(self, interaction, view, ad_manager):
         super().__init__(title='Billboard Ad')
         self.interaction = interaction
@@ -253,7 +261,9 @@ class BillboardClanModal(discord.ui.Modal):
     )
 
     async def on_submit(self, interaction: discord.Interaction, /):
-        """When the \"Submit\" button is selected."""
+        """
+        When the \"Submit\" button is selected.
+        """
         # Enable the "Post Ad" message.
         self.view.children[3].disabled = False
 

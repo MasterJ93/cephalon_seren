@@ -8,7 +8,9 @@ from utils.messages import beginner
 
 
 class OnboardView(discord.ui.View):
-    """Contains a view for first-time members."""
+    """
+    Contains a view for first-time members.
+    """
     def __init__(self,
                  user_id: int,
                  alliance_general: discord.TextChannel,
@@ -32,7 +34,9 @@ class OnboardView(discord.ui.View):
     async def selection_1(self,
                           interaction: discord.Interaction,
                           button: discord.ui.Button):
-        """When the first option is selected."""
+        """
+        When the first option is selected.
+        """
         label = button.label
         print(f"\"{label}\" selected.")
 
@@ -66,7 +70,9 @@ class OnboardView(discord.ui.View):
     async def selection_2(self,
                           interaction: discord.Interaction,
                           button: discord.ui.Button):
-        """When the second option is selected."""
+        """
+        When the second option is selected.
+        """
         label = button.label
         print(f"\"{label}\" selected.")
 
@@ -84,7 +90,9 @@ class OnboardView(discord.ui.View):
     async def selection_3(self,
                           interaction: discord.Interaction,
                           button: discord.ui.Button):
-        """When the third option is selected."""
+        """
+        When the third option is selected.
+        """
         label = button.label
         print(f"\"{label}\" selected.")
 
@@ -97,8 +105,10 @@ class OnboardView(discord.ui.View):
         self,
         response: discord.InteractionResponse,
         response_message: str):
-        """Sends an ephemeral message, then finds and deletes the
-        original message."""
+        """
+        Sends an ephemeral message, then finds and deletes the
+        original message.
+        """
 
         # Ephemeral message is sent, then is deleted after a minute.
         await response.send_message(
@@ -119,8 +129,10 @@ class OnboardView(discord.ui.View):
                 break
 
 class ClanInviteInterestView(discord.ui.View):
-    """Contains a view for admins to decide whether to
-    accept or reject a clan invite."""
+    """
+    Contains a view for admins to decide whether to
+    accept or reject a clan invite.
+    """
     def __init__(self, user_id: int, guild: discord.Guild):
         super().__init__()
         self.user_id = user_id
@@ -131,7 +143,9 @@ class ClanInviteInterestView(discord.ui.View):
     async def accept_invite(self,
                             interaction: discord.Interaction,
                             button: discord.ui.Button):
-        """When the \"Accept\" button is selected."""
+        """
+        When the \"Accept\" button is selected.
+        """
         button.disabled=True
         button.style=discord.ButtonStyle.gray
 
@@ -158,7 +172,9 @@ class ClanInviteInterestView(discord.ui.View):
     async def decline_invite(self,
                              interaction: discord.Interaction,
                              button: discord.ui.Button):
-        """When the \"Decline\" button is selected."""
+        """
+        When the \"Decline\" button is selected.
+        """
         button.disabled=True
         button.style=discord.ButtonStyle.gray
 

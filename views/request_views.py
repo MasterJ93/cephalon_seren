@@ -10,7 +10,8 @@ from utils.messages import requests
 class DrifterInterestView(discord.ui.View):
     """
     Contains a view for admins to consider adding a member to participate
-    in the adult-only channels."""
+    in the adult-only channels.
+    """
     def __init__(self, user_id, guild: discord.Guild):
         super().__init__()
         self.user_id=user_id
@@ -21,7 +22,9 @@ class DrifterInterestView(discord.ui.View):
     async def accept_request(self,
                              interaction: discord.Interaction,
                              button: discord.ui.Button):
-        """If the \"Accept\" button was selected."""
+        """
+        If the \"Accept\" button was selected.
+        """
         button.disabled=True
         button.style=discord.ButtonStyle.gray
 
@@ -44,7 +47,9 @@ class DrifterInterestView(discord.ui.View):
     async def reject_request(self,
                              interaction: discord.Interaction,
                              button: discord.ui.Button):
-        """If the \"Decline\" button was selected."""
+        """
+        If the \"Decline\" button was selected.
+        """
         print(f'\"{button.label}\" button pressed.')
         button.disabled=True
         button.style=discord.ButtonStyle.gray
