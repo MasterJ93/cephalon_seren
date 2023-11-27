@@ -5,7 +5,7 @@
 
 ![Static Badge](https://img.shields.io/badge/I'm%20detecting%20a%20large%20security%20force%20heading%20your%20way-It's%20the%20Grineer.-purple)
 
-Cephalon Seren is a Warframe-fpcused Discord bot. Even though his main goal is to moderate the Shinobi of the Lotus Discord server, he also helps with onboarding new members, delivers invite request, and posting billboards for other clans.
+Cephalon Seren is a Warframe-focused Discord bot. Even though his main goal is to moderate the Shinobi of the Lotus Discord server, he also helps with onboarding new members, delivers invite request, and posting billboards for other clans.
 
 If you'd like to join the Shinobi of the Lotus clan or its respective alliance, you can visit us at <https://discord.gg/fpg88dzeyP>. We do require you to be actively playing Warframe, however. If you want to join the clan, you need to at least be 18 years old as well.
 
