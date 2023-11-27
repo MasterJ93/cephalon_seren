@@ -45,11 +45,6 @@ class Membership(commands.Cog):
         # any messages.
         if member.bot is True:
             return
-        # Post an ephemeral message, asking the member if they're here to
-        # join the clan.
-        channel = member.guild.get_channel(
-            settings['CHANNEL_ID']['ALLIANCE_GENERAL']
-        )
 
         # Sends the message and mentions the member.
         # Note: we send alliance_billboard in case the member selects
@@ -57,6 +52,7 @@ class Membership(commands.Cog):
         alliance_billboard = member.guild.get_channel(
             settings['CHANNEL_ID']['ALLIANCE_BILLBOARD']
         )
+        channel = await member.create_dm()
         view = OnboardView(member.id, channel, alliance_billboard)
         await channel.send(
             content=beginner['INTRO'].format(username=member.mention),

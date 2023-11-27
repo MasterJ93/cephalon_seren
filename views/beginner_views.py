@@ -45,10 +45,11 @@ class OnboardView(discord.ui.View):
         # Unlike the other options, this option will have Seren send a message
         # to the admins in the admin channel, asking if they want to accept
         # the member's invite.
-        admin_channel = self.alliance_general.guild.get_channel(
+        admin_channel = self.alliance_billboard.guild.get_channel(
             settings['CHANNEL_ID']['ADMIN_CHANNEL']
         )
-        member = self.alliance_general.guild.get_member(self.user_id)
+        print(f'Alliance General: {self.alliance_billboard.guild}')
+        member = self.alliance_billboard.guild.get_member(self.user_id)
 
         if isinstance(admin_channel, discord.abc.Messageable) and \
             isinstance(member, discord.Member):
