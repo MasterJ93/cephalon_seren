@@ -297,6 +297,7 @@ class BillboardClanModal(discord.ui.Modal):
         # (this is also used to dismiss the modal).
         await interaction.response.send_message(
             content="Preview has been updated.",
+            delete_after=10.0,
             ephemeral=True
         )
 
