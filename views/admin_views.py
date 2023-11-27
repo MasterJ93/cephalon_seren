@@ -64,9 +64,7 @@ class WarnView(discord.ui.View):
         self.values = sorted_values
 
         # Loop through the list to grab each rule.
-        rules = ''
-        for rule in sorted_values:
-            rules += f'> {rule}\n'
+        rules = '\n'.join(f'> {rule}' for rule in sorted_values)
 
         # Look for the Send Message button, then enable it.
         # We're using `#type: ignore` to stop Pylance from complaining.
