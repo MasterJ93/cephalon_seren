@@ -37,8 +37,8 @@ class BillBoardCommands(commands.Cog):
     @app_commands.choices(select=[
             app_commands.Choice(
                 name="Create Ad", value="create"),
-            app_commands.Choice(
-                name="Edit Ad", value="edit"),
+            # app_commands.Choice(
+            #     name="Edit Ad", value="edit"),
             app_commands.Choice(
                 name="Delete Ad", value="delete")
     ])
