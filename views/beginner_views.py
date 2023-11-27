@@ -1,6 +1,7 @@
 """
 Contains views related to members that just came into the server.
 """
+import asyncio
 import discord
 
 from config import settings
@@ -61,7 +62,7 @@ class OnboardView(discord.ui.View):
                 view=view
             )
 
-        await self.send_message_and_end_onboarding(interaction.response,
+        await self.send_message_and_end_onboarding(interaction,
                                                    response_message)
 
     @discord.ui.button(
@@ -81,7 +82,7 @@ class OnboardView(discord.ui.View):
                     billboards=self.alliance_billboard.mention
         )
 
-        await self.send_message_and_end_onboarding(interaction.response,
+        await self.send_message_and_end_onboarding(interaction,
                                                    response_message)
 
     @discord.ui.button(
@@ -99,12 +100,12 @@ class OnboardView(discord.ui.View):
 
         response_message = beginner['OPTION_3_RESPONSE']
 
-        await self.send_message_and_end_onboarding(interaction.response,
+        await self.send_message_and_end_onboarding(interaction,
                                                    response_message)
 
     async def send_message_and_end_onboarding(
         self,
-        response: discord.InteractionResponse,
+        interaction: discord.Interaction,
         response_message: str):
         """
         Sends an ephemeral message, then finds and deletes the
@@ -112,11 +113,23 @@ class OnboardView(discord.ui.View):
         """
 
         # Ephemeral message is sent, then is deleted after a minute.
-        await response.send_message(
+        await interaction.response.send_message(
             content=response_message,
             ephemeral=True,
             delete_after=60.0
         )
+
+        message_counter = 3
+        async for message in \
+            interaction.channel.history(limit=200): #type: ignore
+            if message.author.bot is True:
+                await message.delete()
+                await asyncio.sleep(3)
+                message_counter -= 1
+
+                if message_counter == 0:
+                    break
+
 
 class ClanInviteInterestView(discord.ui.View):
     """
