@@ -118,17 +118,6 @@ class OnboardView(discord.ui.View):
             delete_after=60.0
         )
 
-        # We need to search for the original message so we can delete it.
-        async for message in self.alliance_general.history(
-            limit=200,
-            oldest_first=True):
-            if message.author.bot is False:
-                continue
-
-            if message.mentions[0].id == self.user_id:
-                await message.delete()
-                break
-
 class ClanInviteInterestView(discord.ui.View):
     """
     Contains a view for admins to decide whether to
