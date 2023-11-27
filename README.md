@@ -1,10 +1,9 @@
 # Cephalon Seren
 
-[![Release](https://img.shields.io/github/release/freecad/freecad.svg)](https://github.com/freecad/freecad/releases/latest)
-
+[![Release](https://img.shields.io/github/release/masterj93/cephalon-seren.svg)](https://github.com/masterj93/cephalon-seren/releases/latest)
 ![Discord](https://img.shields.io/discord/864182092271190096)
-![Static Badge](https://img.shields.io/badge/It's%20the%20Grineer-purple)
 
+![Static Badge](https://img.shields.io/badge/I'm%20detecting%20a%20large%20security%20force%20heading%20your%20way-It's%20the%20Grineer.-purple)
 
 Cephalon Seren is a Warframe-fpcused Discord bot. Even though his main goal is to moderate the Shinobi of the Lotus Discord server, he also helps with onboarding new members, delivers invite request, and posting billboards for other clans.
 
