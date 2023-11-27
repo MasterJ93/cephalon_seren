@@ -12,6 +12,7 @@ from discord.ext import commands
 from config import settings
 from utils.messages import beginner, requests
 from views.beginner_views import OnboardView
+from views.request_views import DrifterInterestView
 
 
 class Membership(commands.Cog):
@@ -81,10 +82,16 @@ class Membership(commands.Cog):
             content=requests['DRIFTER_INTEREST'].format(
                 username=interaction.user.mention
             )
+
+            view = DrifterInterestView(
+                interaction.user.id, interaction.guild) #type: ignore
             await admin_channel.send(
-                content=content
+                content=content,
+                view=view
             )
 
+        # Sends an ephemeral message, stating that the user's request has
+        # been sent.
         await interaction.response.send_message(
             content=requests['DRIFTER_REQUEST'],
             ephemeral=True
