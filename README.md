@@ -1,6 +1,6 @@
 # Cephalon Seren
 
-[![Latest Release](https://img.shields.io/github/release/MasterJ93/cephalon_seren.svg)](https://github.com/MasterJ93/cephalon_seren/releases/latest)
+![GitHub release (with filter)](https://img.shields.io/github/v/release/MasterJ93/cephalon_seren)
 ![Discord](https://img.shields.io/discord/864182092271190096)
 
 ![Static Badge](https://img.shields.io/badge/I'm%20detecting%20a%20large%20security%20force%20heading%20your%20way-It's%20the%20Grineer.-purple)
