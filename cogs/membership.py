@@ -29,7 +29,7 @@ class Membership(commands.Cog):
         """
 
         # Wait for a set amount of time before assigning the role.
-        await asyncio.sleep(5)
+        await asyncio.sleep(3)
 
         alliance_role = member.guild.get_role(
             settings['ROLE_ID']['ALLIANCE']
