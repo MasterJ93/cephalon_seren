@@ -196,12 +196,21 @@ class BillboardView(discord.ui.View):
             clan_emblem_url=None
             _file=None
 
-        await billboard_channel.send(content="\u200B", #type: ignore
+        message = await billboard_channel.send(content="\u200B", #type: ignore
             file=_file, #type: ignore
             embed=_embed
         )
 
-        # Delete the message and temp dictionary.
+        # Add the message ID to the JSON entry.
+        message_id = message.id
+        ad_json = await self.ad_manager.read(user_id=self.member.id)
+        updates = {}
+
+        updates['MESSAGE_ID'] = message_id
+
+        await self.ad_manager.update(self.member.id, **updates)
+
+        # Delete the message.
         await self.interaction.delete_original_response()
         await self.ad_manager.load_ads()
 
