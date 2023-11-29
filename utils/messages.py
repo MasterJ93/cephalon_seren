@@ -94,6 +94,6 @@ clan_ad = {
 
 misc = {
     'UPLOAD_EMBLEM': (
-        "To upload your clan emblem, use the slash command "
-        "\"/billboard upload\" and drag and drop your clan emblem.")
+        "To upload your clan emblem, use \"/billboard Create Ad,\" select "
+        "\"Clan Emblem,\" and drag and drop your clan emblem.")
 }
