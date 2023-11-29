@@ -175,6 +175,19 @@ class BillBoardCommands(commands.Cog):
 
             try:
                 await interaction.response.defer(ephemeral=True)
+
+                # Find message of ad and delete it.
+                message_id = await self.ad_manager.read(
+                    member, key=ClanAdKey.MESSAGE_ID)
+                alliance_billboard = discord.utils.get(
+                    interaction.guild.channels, #type: ignore
+                    id=settings['CHANNEL_ID']['ALLIANCE_BILLBOARD'])
+                billboard_ad = discord.utils.get(
+                    alliance_billboard.history(), #type: ignore
+                    id=int(message_id))
+
+                await billboard_ad.delete() # type: ignore
+
                 await self.ad_manager.delete(member)
             except IDNotFoundException:
                 await interaction.response.defer(ephemeral=True)
