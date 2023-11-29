@@ -243,3 +243,13 @@ class BillBoardCommands(commands.Cog):
         #     )
 
         return await attachment.to_file() #type: ignore
+
+    @billboard_command.error
+    async def billboard_command_error(self, ctx, error):
+        """
+        A local error handler for the '/billboard' Slash Command.
+        """
+
+        if isinstance(error, discord.HTTPException):
+            print(f"Error:\nCode: {error.code}\nStatus: {error.response}\n"
+                  f"Text: {error.status}\nText: {error.text}")
