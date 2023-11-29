@@ -232,7 +232,7 @@ class BillboardClanModal(discord.ui.Modal):
 
     clan_name = discord.ui.TextInput(
         label="Clan name",
-        placeholder='Shinobi of the Lotus',
+        placeholder='(e.g.: Shinobi of the Lotus)',
         custom_id='clan_name',
         min_length=5,
         max_length=100,
@@ -242,8 +242,8 @@ class BillboardClanModal(discord.ui.Modal):
 
     clan_description = discord.ui.TextInput(
         label="Write a description of your clan.",
-        placeholder=("Shinobi of the Lotus is a clan that helps players be "
-            "masters at movement and navigation."),
+        placeholder=("(e.g.: Shinobi of the Lotus is a clan that "
+            "helps players be masters at movement and navigation.)"),
         custom_id='clan_des',
         max_length=1024,
         style=discord.TextStyle.long,
@@ -251,8 +251,8 @@ class BillboardClanModal(discord.ui.Modal):
     )
 
     clan_requirements = discord.ui.TextInput(
-        label="Set the requirements of your clan.",
-        placeholder="We require members to be 18 or older.",
+        label="(e.g.: Set the requirements of your clan.",
+        placeholder="We require members to be 18 or older.)",
         custom_id='clan_req',
         max_length=300,
         style=discord.TextStyle.long,

@@ -70,17 +70,17 @@ class BillBoardCommands(commands.Cog):
             await interaction.response.defer(ephemeral=True)
             # Build the embed.
             embed = Embed(
-                title="_Shinobi of the Lotus#141_",
+                title="_(Shinobi of the Lotus)_",
                 description='\u200B',
                 color=Color.red()
             )
             embed.add_field(
                 name='Invite Requirements',
-                value='\u200B',
+                value='_(Please be 18 years old or older.)_',
                 inline=False
             )
             embed.add_field(
-                name="_Select invite status from the dropdown below._",
+                name="_(Select invite status from the dropdown below.)_",
                 value="\u200B",
                 inline=True
             )
