@@ -36,7 +36,7 @@ For development, we also require the following:
 2. **Clone the Repository**:
 
    ```bash
-   git clone git://github.com/MasterJ93/cephalon-seren
+   git clone https://github.com/MasterJ93/cephalon_seren.git
    cd cephalon-seren
    ```
 
