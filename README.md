@@ -90,10 +90,8 @@ If you need help with understanding anything, let me (@MasterJ93) know. Or send 
 
 ## Licence
 
-This project is licensed under the MIT License - see the LICENCE for details.
+This project is licensed under the MIT License - see the [LICENCE](https://github.com/MasterJ93/cephalon_seren/blob/main/LICENCE) for details.
 
 ### Dependencies' Licenses
 
-This project uses third-party libraries or dependencies, each with their own licenses:
-
-* `aiofiles` is licensed under the Apache License 2.0. See the NOTICE file for more information.
+This project uses third-party libraries or dependencies, each with their own licenses. See the [NOTICE](https://github.com/MasterJ93/cephalon_seren/blob/main/NOTICE) file for more information.
