@@ -330,14 +330,21 @@ class AdPreview:
         """
         member_id = self.member.id
         clan_ad_details = await self._get_clan_ad_details(member_id)
-        color = self._determine_color(
-            clan_ad_details[ClanAdKey.INVITE_STATUS]
-            )
-        emblem_img = await self._download_emblem_image(
-            clan_ad_details[ClanAdKey.CLAN_EMBLEM_URL]
-            )
+        color = self._determine_color(clan_ad_details[ClanAdKey.INVITE_STATUS])
+
+        url = clan_ad_details[ClanAdKey.CLAN_EMBLEM_URL]
+        if url:
+            emblem_img = await self._download_emblem_image(url)
+        else:
+            emblem_img = None
+
         embed = self._build_embed(clan_ad_details, color, emblem_img)
-        await self._send_embed(embed, _content)
+        file = None
+        if url and emblem_img:
+            file = discord.File(emblem_img, filename="emblem.png")
+            embed.set_thumbnail(url="attachment://emblem.png")
+
+        await self._send_embed(embed, _content, file)
 
     async def _get_clan_ad_details(self, member_id):
         keys = [
@@ -348,7 +355,7 @@ class AdPreview:
             key: await self.ad_manager.read(
                 member_id, key=key
                 ) for key in keys
-                }
+            }
 
     def _determine_color(self, invite_status):
         return Color.green() if invite_status == '0x0' else Color.red()
@@ -393,7 +400,9 @@ class AdPreview:
 
         return embed
 
-    async def _send_embed(self, embed, _content):
+    async def _send_embed(self, embed, _content, file=None):
         await self.interaction.edit_original_response(
-            content=_content, embed=embed, view=self.view
-            )
+            content=_content, embed=embed,
+            attachments=[] if file is None else [file],
+            view=self.view
+        )

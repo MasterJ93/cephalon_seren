@@ -105,8 +105,12 @@ class ImgDownloader():
         Args:
             url (str): The URL used to download the image.
         """
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as resp:
-                if resp.status != 200:
-                    raise RequestFailedException()
-                return io.BytesIO(await resp.read())
+        
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url) as resp:
+                    if resp.status != 200:
+                        raise RequestFailedException()
+                    return io.BytesIO(await resp.read())
+        except aiohttp.client.InvalidURL as exc:
+            raise RequestFailedException(f"Invalid URL: {url}") from exc
