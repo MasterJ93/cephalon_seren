@@ -260,8 +260,8 @@ class BillboardClanModal(discord.ui.Modal):
     )
 
     clan_requirements = discord.ui.TextInput(
-        label="(e.g.: Set the requirements of your clan.",
-        placeholder="We require members to be 18 or older.)",
+        label="Set the requirements of your clan.",
+        placeholder="(e.g.: We require members to be 18 or older.)",
         custom_id='clan_req',
         max_length=300,
         style=discord.TextStyle.long,
