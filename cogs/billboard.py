@@ -4,6 +4,7 @@ alliance-billboard channel.
 """
 
 from typing import Optional
+import traceback
 
 import discord
 from discord import Color, Embed, app_commands
@@ -245,7 +246,10 @@ class BillBoardCommands(commands.Cog):
         return await attachment.to_file() #type: ignore
 
     @billboard_command.error
-    async def billboard_command_error(self, ctx, error):
+    async def billboard_command_error(
+        self, ctx: discord.Interaction,
+        error: discord.app_commands.AppCommandError
+        ):
         """
         A local error handler for the '/billboard' Slash Command.
         """
@@ -253,3 +257,11 @@ class BillBoardCommands(commands.Cog):
         if isinstance(error, discord.HTTPException):
             print(f"Error:\nCode: {error.code}\nStatus: {error.response}\n"
                   f"Text: {error.status}\nText: {error.text}")
+        else:
+            traceback_info = traceback.format_exc()
+            print(f"Unhandled error in billboard_command: {error}\nTraceback:\n{traceback_info}")
+
+            await ctx.response.send_message(
+                content="An unexpected error occurred. Please try again later.",
+                ephemeral=True
+            )
