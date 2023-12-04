@@ -75,4 +75,6 @@ for cog in initial_cogs:
         print(e)
 
 
-client.run(settings['DISCORD_TOKEN'])
+client.run(settings['DISCORD_TOKEN'],
+        #    root_logger=False
+           )
