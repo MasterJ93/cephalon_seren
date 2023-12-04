@@ -26,14 +26,17 @@ class AdminCommands(commands.Cog):
     @app_commands.describe(
         member='The member you want to send a warning to.')
     @app_commands.checks.has_role(settings['ROLE_ID']['ADMIN'])
-    async def warn_member(self,
-                          interaction: discord.Interaction,
-                          member: discord.Member
-                          ):
+    async def warn_member(
+        self,
+        interaction: discord.Interaction,
+        member: discord.Member
+    ):
         """
         Warns a member when they violate a rule.
         """
-        view = WarnView(interaction, interaction.guild, member) #type: ignore
+        view = WarnView(
+            interaction, interaction.guild, member #type: ignore
+            )
         await interaction.response.send_message(view=view)
         await view.wait()
 
@@ -50,7 +53,8 @@ class AdminCommands(commands.Cog):
                 )
             )
 
-            # Edit the message to refresh and state that the message was send.
+            # Edit the message to refresh and state that the
+            # message was sent.
             view.clear_items()
             await interaction.edit_original_response(
                 content=admin['WARN_SENT'],
