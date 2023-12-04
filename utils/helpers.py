@@ -105,7 +105,6 @@ class ImgDownloader():
         Args:
             url (str): The URL used to download the image.
         """
-        
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.get(url) as resp:
