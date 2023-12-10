@@ -61,7 +61,7 @@ async def sync(_ctx):
         print(err)
 
 initial_cogs = [
-    Membership(client),
+    Membership(client, clan_ad_manager),
     AdminCommands(client),
     BillBoardCommands(client, clan_ad_manager)
 ]

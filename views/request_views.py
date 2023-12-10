@@ -4,6 +4,7 @@ Contains views related to requests made by members.
 import discord
 
 from config import settings
+from utils.clan_ad_manager import ClanAdManager
 from utils.messages import requests
 
 

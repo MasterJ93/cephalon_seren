@@ -10,6 +10,7 @@ from discord import app_commands
 from discord.ext import commands
 
 from config import settings
+from utils.clan_ad_manager import ClanAdManager
 from utils.messages import beginner, requests
 from views.beginner_views import OnboardView
 from views.request_views import DrifterInterestView
@@ -19,7 +20,7 @@ class Membership(commands.Cog):
     """
     Membership Cog for handling new members and their roles.
     """
-    def __init__(self, bot):
+    def __init__(self, bot, ad_manager: ClanAdManager):
         self.bot = bot
 
     @commands.Cog.listener()
