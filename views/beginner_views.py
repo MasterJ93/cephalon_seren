@@ -16,7 +16,7 @@ class OnboardView(discord.ui.View):
                  user_id: int,
                  alliance_general: discord.TextChannel,
                  alliance_billboard: discord.TextChannel):
-        super().__init__()
+        super().__init__(timeout=None)
         self.user_id = user_id
         self.alliance_general = alliance_general
         self.alliance_billboard = alliance_billboard
@@ -137,7 +137,7 @@ class ClanInviteInterestView(discord.ui.View):
     accept or reject a clan invite.
     """
     def __init__(self, user_id: int, guild: discord.Guild):
-        super().__init__()
+        super().__init__(timeout=None)
         self.user_id = user_id
         self.guild = guild
         self.value = None

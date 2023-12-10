@@ -13,7 +13,7 @@ class WarnView(discord.ui.View):
                  interaction: discord.Interaction,
                  guild: discord.Guild,
                  member: discord.Member):
-        super().__init__()
+        super().__init__(timeout=None)
         self.interaction=interaction
         self.guild=guild
         self.member=member

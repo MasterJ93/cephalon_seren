@@ -19,7 +19,7 @@ class BillboardView(discord.ui.View):
     def __init__(self,
                  interaction, ad_manager,
                  clan_emblem=None):
-        super().__init__()
+        super().__init__(timeout=None)
         self.interaction = interaction
         self.guild = interaction.guild
         self.member = interaction.user
@@ -190,7 +190,7 @@ class BillboardClanModal(discord.ui.Modal):
     The modal used to enter the details for the Billboard ad.
     """
     def __init__(self, interaction, view, ad_manager):
-        super().__init__(title='Billboard Ad')
+        super().__init__(title='Billboard Ad', timeout=None)
         self.interaction = interaction
         self.guild = interaction.guild
         self.member = interaction.user

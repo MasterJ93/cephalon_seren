@@ -14,7 +14,7 @@ class DrifterInterestView(discord.ui.View):
     in the adult-only channels.
     """
     def __init__(self, user_id, guild: discord.Guild):
-        super().__init__()
+        super().__init__(timeout=None)
         self.user_id=user_id
         self.guild=guild
         self.value=None
