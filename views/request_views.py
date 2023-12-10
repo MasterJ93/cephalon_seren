@@ -4,7 +4,7 @@ Contains views related to requests made by members.
 import discord
 
 from config import settings
-from utils.clan_ad_manager import ClanAdManager
+from utils.clan_ad_manager import ClanAdKey, ClanAdManager
 from utils.messages import requests
 
 
@@ -70,15 +70,29 @@ class ClanInviteRequestView(discord.ui.View):
         self.clan_list = clan_list
         self.ad_manager = ad_manager
 
-        # Loop through all of the clans.
-        for clan in clan_list:
-            clan_option = discord.SelectOption(
-                label='[Name of clan]'
-            )
-            self.options.append(clan_option)
-
 
     options = []
+
+    async def refresh_clan_invite_list(self, clan_list):
+        """
+        Loops through all of the clans that are open for members.
+
+        Args:
+            clan_list (list[dict]): The list of clans.
+        """
+        # Clear the options:
+        self.options.clear()
+
+        counter = 0
+        for clan in clan_list:
+            clan_name = clan.get(ClanAdKey.NAME)
+            clan_option = discord.SelectOption(
+                label=clan_name,
+                value=str(counter)
+            )
+
+            self.options.append(clan_option)
+            counter += 1
 
     @discord.ui.select(
             placeholder='Select a clan.',
