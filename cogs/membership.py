@@ -10,7 +10,7 @@ from discord import app_commands
 from discord.ext import commands
 
 from config import settings
-from utils.clan_ad_manager import ClanAdManager
+from utils.clan_ad_manager import ClanAdKey, ClanAdManager
 from utils.messages import beginner, requests
 from views.beginner_views import OnboardView
 from views.request_views import (
@@ -75,6 +75,9 @@ class Membership(commands.Cog):
         """
         clan_list = []
         for ad in self.ad_manager.clan_ads:
+            if ad.get(ClanAdKey.MESSAGE_ID) == '0':
+                continue
+
             clan_list.append(ad)
 
         # Change the message based on the total number of
