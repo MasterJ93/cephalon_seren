@@ -81,8 +81,8 @@ class BillBoardCommands(commands.Cog):
                 inline=False
             )
             embed.add_field(
-                name="_(Select invite status from the dropdown below.)_",
-                value="\u200B",
+                name="Invite Status",
+                value="_(Select invite status from the dropdown below.)_",
                 inline=True
             )
             if resolved_attachment is not None or resolved_attachment == '':
