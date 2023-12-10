@@ -59,3 +59,37 @@ class DrifterInterestView(discord.ui.View):
         await interaction.response.send_message(
             content=requests['DRIFTER_DECLINE']
         )
+
+class ClanInviteRequestView(discord.ui.View):
+    """
+    Contains a view for users to select a clan that's open for invites.
+    """
+    def __init__(self, user_id, clan_list, ad_manager: ClanAdManager):
+        super().__init__(timeout=None)
+        self.user_id = user_id
+        self.clan_list = clan_list
+        self.ad_manager = ad_manager
+
+        # Loop through all of the clans.
+        for clan in clan_list:
+            clan_option = discord.SelectOption(
+                label='[Name of clan]'
+            )
+            self.options.append(clan_option)
+
+
+    options = []
+
+    @discord.ui.select(
+            placeholder='Select a clan.',
+            min_values=1,
+            max_values=1,
+            options=options)
+    async def rule_selection(self,
+                             interaction: discord.Interaction,
+                             select: discord.ui.Select):
+        """
+        The dropdown menu that shows the list of clans that are
+        open for invites.
+        """
+        

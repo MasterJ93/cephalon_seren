@@ -13,7 +13,9 @@ from config import settings
 from utils.clan_ad_manager import ClanAdManager
 from utils.messages import beginner, requests
 from views.beginner_views import OnboardView
-from views.request_views import DrifterInterestView
+from views.request_views import (
+    ClanInviteRequestView, DrifterInterestView
+)
 
 
 class Membership(commands.Cog):
@@ -22,6 +24,7 @@ class Membership(commands.Cog):
     """
     def __init__(self, bot, ad_manager: ClanAdManager):
         self.bot = bot
+        self.ad_manager = ad_manager
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -59,6 +62,41 @@ class Membership(commands.Cog):
             content=beginner['INTRO'].format(username=member.mention),
             view = view
         )
+
+    @app_commands.command(
+            name='invite-request',
+            description='Request to join a clan.'
+    )
+    async def invite_request(self,
+                             interaction: discord.Interaction,
+                             ):
+        """
+        Requests a Warlord to be part of their clan.
+        """
+        clan_list = []
+        for ad in self.ad_manager.clan_ads:
+            clan_list.append(ad)
+
+        if clan_list.count is not 0:
+            content = 'Select from the list of clans below:'
+            view = ClanInviteRequestView(
+                interaction.user.id, clan_list, self.ad_manager
+            )
+            delete_after = None
+        else:
+            content = ('Bummer: it seems like all of our clans can\'t take '
+                       'any more members. Hopefully a clan may open more '
+                       'spots in the future.')
+            view = discord.ui.View()
+            delete_after = 10
+
+        await interaction.response.send_message(
+            content=content,
+            view=view,
+            ephemeral=True,
+            delete_after=delete_after
+        )
+
 
     @app_commands.command(name='drifter-request',
                           description='Request access to enter into '
