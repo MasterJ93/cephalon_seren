@@ -77,6 +77,8 @@ class Membership(commands.Cog):
         for ad in self.ad_manager.clan_ads:
             clan_list.append(ad)
 
+        # Change the message based on the total number of
+        # openly invited clans.
         if clan_list.count is not 0:
             content = 'Select from the list of clans below:'
             view = ClanInviteRequestView(
@@ -84,7 +86,7 @@ class Membership(commands.Cog):
             )
             delete_after = None
         else:
-            content = ('Bummer: it seems like all of our clans can\'t take '
+            content = ('Bummer: it seems like none of the clans can take '
                        'any more members. Hopefully a clan may open more '
                        'spots in the future.')
             view = discord.ui.View()
