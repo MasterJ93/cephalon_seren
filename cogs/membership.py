@@ -102,7 +102,6 @@ class Membership(commands.Cog):
             delete_after=delete_after
         )
 
-
     @app_commands.command(name='drifter-request',
                           description='Request access to enter into '
                           'the adult-only channels.')
