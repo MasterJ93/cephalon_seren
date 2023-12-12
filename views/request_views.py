@@ -70,6 +70,8 @@ class ClanInviteRequestView(discord.ui.View):
         self.clan_list = clan_list
         self.ad_manager = ad_manager
 
+        self._selected_clan = []
+
 
     options = []
 
@@ -99,11 +101,66 @@ class ClanInviteRequestView(discord.ui.View):
             min_values=1,
             max_values=1,
             options=options)
-    async def rule_selection(self,
+    async def _rule_selection(self,
                              interaction: discord.Interaction,
                              select: discord.ui.Select):
-        """
-        The dropdown menu that shows the list of clans that are
-        open for invites.
-        """
-        
+        # Convert the string to an integer index, then use the
+        # index to access the item in clan_list
+        index = int(select.values[0])
+        self._selected_clan = self.clan_list[index]
+
+        self.children[1].disabled = False #type: ignore
+
+
+    @discord.ui.button(
+        label='Request Invite',
+        style=discord.ButtonStyle.green,
+        disabled=True,
+        custom_id='request_invite'
+    )
+    async def _request_invite(self,
+                             interaction: discord.Interaction,
+                             _button: discord.ui.Button):
+        await self.ad_manager.load_ads()
+
+        warlord_id = list(self._selected_clan.keys())[0] #type: ignore
+        warlord_id = self.ad_manager.read(int(warlord_id))
+
+        # There may be a chance a Warlord closes their doors while the
+        # user is requesting the invite. In that case, inform the user.
+        if self.ad_manager.read(
+            warlord_id, ClanAdKey.INVITE_STATUS) != '0x0':
+            await interaction.response.edit_message(
+                content=('I tried to send a request to the Warlord. It seems '
+                         'that, while you were selecting the message, they '
+                         'just closed their doors. You\'ll have '
+                         'to try again.')
+            )
+            return
+
+        # Send a DM to the Warlord.
+        warlord = discord.utils.get(
+            interaction.guild.members, id=warlord_id # type: ignore
+            )
+        if warlord.dm_channel is None: #type: ignore
+            await warlord.create_dm() #type: ignore
+
+        await warlord.dm_channel.send( #type: ignore
+            content=''
+        )
+
+        await interaction.response.edit_message(
+            content='I\'ve sent your request to the Warlord! Good luck!'
+        )
+
+
+    @discord.ui.button(
+        label='Cancel',
+        style=discord.ButtonStyle.red,
+        disabled=True,
+        custom_id='cancel'
+    )
+    async def _cancel_button(self,
+                             interaction: discord.Interaction,
+                             _button: discord.ui.Button):
+        await interaction.delete_original_response()
