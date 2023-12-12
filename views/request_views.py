@@ -131,10 +131,7 @@ class ClanInviteRequestView(discord.ui.View):
         if self.ad_manager.read(
             warlord_id, ClanAdKey.INVITE_STATUS) != '0x0':
             await interaction.response.edit_message(
-                content=('I tried to send a request to the Warlord. It seems '
-                         'that, while you were selecting the message, they '
-                         'just closed their doors. You\'ll have '
-                         'to try again.')
+                content=requests['CLAN_INVITE_TOO_LATE']
             )
             return
 
@@ -150,7 +147,7 @@ class ClanInviteRequestView(discord.ui.View):
         )
 
         await interaction.response.edit_message(
-            content='I\'ve sent your request to the Warlord! Good luck!'
+            content=requests['INVITE_INTEREST_SENT']
         )
 
 

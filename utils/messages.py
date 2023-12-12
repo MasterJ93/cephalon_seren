@@ -63,7 +63,31 @@ requests = {
         "I\'ve removed the Operator role. You\'ll only see the clan "
         "and adult-only channels now. If you want to re-add the role, "
         "just use this command again."
-        )
+        ),
+    'CLAN_INVITE_NONE_AVAILABLE': (
+        "Bummer: it seems like none of the clans can take "
+        "any more members. Hopefully a clan may open more "
+        "spots in the future."
+        ),
+    'CLAN_INVITE_TOO_LATE': (
+        "I tried to send a request to the Warlord. It seems that, "
+        "while you were selecting the clan, the Warlord decided to "
+        "close their doors. You\'ll have to select another clan."
+    ),
+    'INVITE_INTEREST_SENT': (
+        "I\'ve sent your request to the Warlord! Good luck!"
+        ),
+    'INVITE_INTEREST': "{username} has requested to be part of the clan.",
+    'INVITE_ACCEPT_SHINOBI': (
+        "I\'ve added the roles to the member. They should "
+        "now be able to access the clan-only channels."
+        ),
+    'INVITE_ACCEPT_GENERAL': (
+        "I\'ve sent them a message, telling them they're able to be in "
+        "your clan."
+        ),
+    'INVITE_DECLINE': "I\'ve declined the member\'s request.",
+    'INVITE_BLOCKED': "I\'ve "
 }
 
 admin = {
