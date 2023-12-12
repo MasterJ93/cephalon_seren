@@ -87,7 +87,15 @@ requests = {
         "your clan."
         ),
     'INVITE_DECLINE': "I\'ve declined the member\'s request.",
-    'INVITE_BLOCKED': "I\'ve "
+    'INVITE_USER_BLOCKED': (
+        "I\'ve blocked {username}; they shouldn't be able to send you "
+        "requests now. Just a head's up: if this was done by mistake, you "
+        "can click the \"Undo Block\" button below, or use the "
+        "\"/invite-unblock\" Slash Command."
+        ),
+    'INVITE_USER_UNBLOCKED': (
+        "{username} has now been unblocked and they'll be able "
+        "to send you invite requests again.")
 }
 
 admin = {
