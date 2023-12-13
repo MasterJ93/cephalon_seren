@@ -27,6 +27,7 @@ class ClanAdKey(Enum):
     CLAN_EMBLEM_URL = 'CLAN_EMBLEM_URL'
     INVITE_STATUS = 'INVITE_STATUS'
     MESSAGE_ID = 'MESSAGE_ID'
+    BANNED_MEMBERS = 'BANNED_MEMBERS'
 
 
 class ClanAdManager():
@@ -75,7 +76,8 @@ class ClanAdManager():
                 await file.write(json.dumps(data, indent=4))
 
     async def create(self, user_id, name="", description="", requirements="",
-                     clan_emblem_url="", invite_status="", message_id=0):
+                     clan_emblem_url="", invite_status="", message_id=0,
+                     banned_members=None):
         """
         Creates a dictionary entry for the clan ad.
         """
@@ -87,13 +89,17 @@ class ClanAdManager():
                 raise IDAlreadyExistsException(
                     f"ID ({user_id}) already exists.")
 
+            if banned_members is None:
+                banned_members = []
+
             self.clan_ads[user_id] = {
                 'NAME': name,
                 'DESCRIPTION': description,
                 'REQUIREMENTS': requirements,
                 'CLAN_EMBLEM_URL': clan_emblem_url,
                 'INVITE_STATUS': invite_status,
-                'MESSAGE_ID': message_id
+                'MESSAGE_ID': message_id,
+                'BANNED_USERS': banned_members
             }
 
         await self._save_data()
@@ -138,7 +144,9 @@ class ClanAdManager():
             print(f"value_keys: {valid_keys}")
             for key, value in kwargs.items():
                 print(f"Key-Value pair: ({key}), ({value})")
-                if key.upper() in valid_keys and value is not None:
+                if key.upper() == 'BANNED_MEMBERS':
+                    self.clan_ads[user_id][key.upper()] = value
+                elif key.upper() in valid_keys and value is not None:
                     self.clan_ads[user_id][key.upper()] = value
                 elif key.upper() not in valid_keys:
                     raise ValueError(f"Key ({key}) is invalid.")
@@ -158,3 +166,50 @@ class ClanAdManager():
 
             del self.clan_ads[user_id]
         await self._save_data()
+
+    async def is_user_banned(self, user_id, banned_member_id):
+        """
+        Checks if a member is in the BANNED_MEMBERS list of a
+        specific clan ad.
+        """
+        async with self.lock:
+            clan_ad = self.clan_ads.get(str(user_id))
+            if clan_ad and banned_member_id in clan_ad.get(
+                'BANNED_MEMBERS', []
+                ):
+                return True
+
+        return False
+
+    async def add_banned_user(self, user_id, banned_member_id):
+        """
+        Adds a user ID to the BANNED_USERS list for a specific clan ad.
+        """
+        async with self.lock:
+            if user_id not in self.clan_ads:
+                raise IDNotFoundException(f"Couldn't find ID ({user_id}).")
+
+            if banned_member_id not in self.clan_ads[user_id].get(
+                'BANNED_USERS', []
+                ):
+                self.clan_ads[user_id]['BANNED_USERS'].append(
+                    banned_member_id
+                    )
+                await self._save_data()
+
+    async def remove_banned_user(self, user_id, banned_member_id):
+        """
+        Remove a user ID from the BANNED_MEMBERS list for a
+        specific clan ad.
+        """
+        async with self.lock:
+            if user_id not in self.clan_ads:
+                raise IDNotFoundException(f"Couldn't find ID ({user_id}).")
+
+            if banned_member_id in self.clan_ads[user_id].get(
+                'BANNED_USERS', []
+                ):
+                self.clan_ads[user_id]['BANNED_USERS'].remove(
+                    banned_member_id
+                    )
+                await self._save_data()
