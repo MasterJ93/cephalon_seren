@@ -152,19 +152,16 @@ class ClanInviteInterestView(discord.ui.View):
         button.disabled=True
         button.style=discord.ButtonStyle.gray
 
-        member = self.guild.get_member(self.user_id)
-        drifter_role = self.guild.get_role(
+        member = interaction.guild.get_member(self.user_id) #type: ignore
+        drifter_role = interaction.guild.get_role( #type: ignore
             settings['ROLE_ID']['DRIFTER']
         )
-        clan_role = self.guild.get_role(
+        clan_role = interaction.guild.get_role( # type: ignore
             settings['ROLE_ID']['CLAN']
         )
 
         # Add the roles to the new clan member.
-        if isinstance(member, discord.Member) and \
-            isinstance(drifter_role, discord.Role) and \
-            isinstance(clan_role, discord.Role):
-            await member.add_roles(drifter_role, clan_role)
+        await member.add_roles(drifter_role, clan_role) #type: ignore
 
         # Send a message stating that it's done.
         await interaction.response.send_message(
