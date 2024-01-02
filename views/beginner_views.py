@@ -5,7 +5,7 @@ import asyncio
 import discord
 
 from config import settings
-from utils.messages import beginner
+from utils.messages import beginner, requests
 
 
 class OnboardView(discord.ui.View):
@@ -181,4 +181,15 @@ class ClanInviteInterestView(discord.ui.View):
         # Sends a response back to the admins.
         await interaction.response.send_message(
             content=beginner['INVITE_DECLINE']
+        )
+
+    @discord.ui.button(label="Block", style=discord.ButtonStyle.red)
+    async def _block_member(self,
+                           interaction: discord.Interaction,
+                           button: discord.ui.Button):
+
+        # View for blocking and unblocking a user.
+        await interaction.response.send_message(
+            content=requests['INVITE_USER_BLOCKED'],
+            ephemeral=True
         )
