@@ -161,3 +161,27 @@ class ClanInviteRequestView(discord.ui.View):
                              interaction: discord.Interaction,
                              _button: discord.ui.Button):
         await interaction.delete_original_response()
+
+class ClanInviteBlockManager(discord.ui.View):
+    """
+    A view which allows a Warlord to block or unblock a given member.
+    """
+    def __init__(self, user_id, guild,  ad_manager: ClanAdManager):
+        super ().__init__(timeout=None)
+        self.user_id = user_id
+        self.guild = guild
+        self.ad_manager = ad_manager
+
+    @discord.ui.button(
+        label='Block',
+        style=discord.ButtonStyle.red,
+        custom_id='block-choice'
+    )
+    async def _block_choice(self,
+                            interaction: discord.Interaction,
+                            _button: discord.ui.Button):
+        await self.ad_manager.add_banned_user(interaction.user.id,
+                                              self.user_id)
+
+        await self.ad_manager.remove_banned_user(interaction.user.id,
+                                                 self.user_id)
